@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server for react client",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.ts",
+    "build":"npm install && tsc",
+    "start": "node ./build/index.js"
+  },
+  "author": "kuldeep",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.2"
+  }
+}
