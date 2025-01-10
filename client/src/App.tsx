@@ -4,6 +4,12 @@ import Login from './components/Common/Login';
 import UserLayout from './components/Layout/UserLayout';
 import RootLayout from './components/Layout/RootLayout';
 import AdminLayout from './components/Layout/AdminLayout';
+import DashBoardLayout from './components/Layout/DashBoardLayout';
+import SuperAdminLayout from './components/Layout/SuperAdminLayout';
+import Home from './components/SuperAdmin/Home';
+import Organizations from './components/SuperAdmin/Organizations';
+import Admins from './components/SuperAdmin/Admins';
+import Users from './components/SuperAdmin/Users';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path:'/dashboard',
+    element:<DashBoardLayout/>,
     children:[
       {
         path:'user',
@@ -41,12 +48,24 @@ const router = createBrowserRouter([
       },
       {
         path:'super-admin',
-        element:<AdminLayout/>,
+        element:<SuperAdminLayout/>,
         children:[
           {
             path:'',
-            element:<div>HEllo</div>
+            element:<Home/>
           },
+          {
+            path:'organizations',
+            element:<Organizations/>
+          },
+          {
+            path:'admins-list',
+            element:<Admins/>
+          },
+          {
+            path:'users-list',
+            element:<Users/>
+          }
         ]
       }
     ]
@@ -55,9 +74,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div className="App">
       <RouterProvider router={router} />
-    </div>
   );
 }
 

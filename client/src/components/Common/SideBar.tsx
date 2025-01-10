@@ -14,7 +14,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { ISidebarProps } from '../../types/uiTypes';
+import { Link } from 'react-router-dom';
 
+import classes from './sidebar.module.css';
 
 const drawerWidth = 240;
 
@@ -55,6 +60,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
+    backgroundColor:'#09090b',
     variants: [
       {
         props: ({ open }) => open,
@@ -76,19 +82,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 interface IMiniDrawerProps{
     children:React.ReactNode;
+    sidebar?:ISidebarProps,
 }
 
-export default function MiniDrawer({children}:IMiniDrawerProps) {
+export default function MiniDrawer({children,sidebar}:IMiniDrawerProps) {
   const [open, setOpen] = React.useState(false);
-
-
+  const userState = useSelector((state:RootState) => state.userState)
+  console.log(userState);
+  console.log(sidebar);
+  
+  
   const handleDrawer = () => {
     setOpen(prev=>!prev);
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Drawer variant="permanent" open={open}>
+    <Box sx={{ display: 'flex' }}  >
+      <Drawer variant="permanent" open={open} className={classes.sidebar}>
         <DrawerHeader>
             {open && <span>ICON</span>}
           <IconButton onClick={handleDrawer}>
@@ -96,7 +106,42 @@ export default function MiniDrawer({children}:IMiniDrawerProps) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        
+        {sidebar && sidebar.map(({heading,items},index)=>(
+        <>
+          <List key={index}>
+          {open && <Box component={'p'} className={classes.header}>{heading}</Box>}
+            {items.map(({text,link}, index) => (
+              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                <Link to={link}>
+                  <ListItemButton>
+                    <ListItemIcon >
+                    <InboxIcon />
+                    </ListItemIcon>
+                    {open && <ListItemText primary={text}/>}
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </>
+      ))}
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1}}>
+        {children}
+      </Box>
+      <>
+      
+      </>
+    </Box>
+
+  );
+}
+
+/*
+
+<List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton>
@@ -121,10 +166,5 @@ export default function MiniDrawer({children}:IMiniDrawerProps) {
           </ListItem>
           ))}
         </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1}}>
-        {children}
-      </Box>
-    </Box>
-  );
-}
+
+*/
