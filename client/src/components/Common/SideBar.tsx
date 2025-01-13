@@ -112,7 +112,7 @@ export default function MiniDrawer({children,sidebar}:IMiniDrawerProps) {
           <List key={index}>
           {open && <Box component={'p'} className={classes.header}>{heading}</Box>}
             {items.map(({text,link}, index) => (
-              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                 <Link to={link}>
                   <ListItemButton>
                     <ListItemIcon >

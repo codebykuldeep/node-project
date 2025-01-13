@@ -7,37 +7,52 @@ import { ISidebarProps } from '../../types/uiTypes';
 
 const SideBarProps:ISidebarProps =[
   {
-    heading:'Lists',
+    heading:'Organization',
     items:[
       {
-        text:'Organization',
+        text:'Details',
         icon:'icon',
-        link:'organizations'
+        link:'organization'
       },
       {
-        text:'Admins',
+        text:'Update Info',
         icon:'icon',
-        link:'admins-list'
+        link:'update'
       },
       {
         text:'Users',
         icon:'icon',
         link:'users-list'
+      },
+    ],
+  },
+  {
+    heading:'Inbox',
+    items:[
+      {
+        text:'transactions',
+        icon:'icon',
+        link:'transactions'
+      },
+      {
+        text:'Pendings',
+        icon:'icon',
+        link:'pending'
       }
     ],
   },
   {
-    heading:'heading 2',
+    heading:'Profile',
     items:[
       {
-        text:'inbox',
+        text:'Account',
         icon:'icon',
-        link:''
+        link:'account'
       },
       {
-        text:'inbox',
+        text:'Logout',
         icon:'icon',
-        link:''
+        link:'logout'
       }
     ],
   }

@@ -6,6 +6,8 @@ import { env } from '../../helpers/constants';
 import { getToken } from '../../helpers/utilityFns';
 import { Column } from '../../types/uiTypes';
 import { IOrganization } from '../../types/dataTypes';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const columns: readonly Column[] = [
     { id: 'name', label: 'Name', minWidth: 170,},
@@ -43,6 +45,7 @@ function Organizations() {
     <div className={classes.container}>
         <div className={classes.heading}>
             <h2>Organisations</h2>
+            <Link to={'add'}><Button variant='contained'>Add</Button></Link>
         </div>
         {data && <DataTable columns={columns} rows={data}/>}
     </div>

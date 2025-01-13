@@ -1,5 +1,5 @@
 import { actionResponse } from "../helpers/Response.js";
-import { addOrganization, getAllOrganization } from "../lib/organization.js";
+import { addOrganization, getAllOrganization, getOrganization } from "../lib/organization.js";
 
 
 export async function handleGetAllOrganization(req,res) {
@@ -23,4 +23,17 @@ export async function handleNewRegister(req,res) {
     } catch (error) {
         return res.json(new actionResponse(500,{error},false))
     }
+}
+
+
+export async function handleGetOrganization(req,res) {
+    const {id} = req.params;
+    try {
+        const data = await getOrganization(id);
+        
+        return res.json(new actionResponse(200,{organization:data},true));
+    } catch (error) {
+        return res.json(new actionResponse(200,{error},false))
+    }
+    
 }

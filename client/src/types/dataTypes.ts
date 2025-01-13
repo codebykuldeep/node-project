@@ -14,3 +14,15 @@ export interface IOrganization{
     payment_url:string;
     [index:string]:string;
 }
+
+
+export interface ITransaction{
+    amount:string;
+    approved:string;
+    created_at:string;
+    id:string;
+    image_url:string;
+    organization_id:string;
+    user_id:string;
+    [index:string]:string;
+}

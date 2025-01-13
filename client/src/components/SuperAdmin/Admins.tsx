@@ -6,6 +6,8 @@ import axios from 'axios';
 import { getToken } from '../../helpers/utilityFns';
 import { env } from '../../helpers/constants';
 import { Column } from '../../types/uiTypes';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const columns: readonly Column[] = [
     { id: 'admin', label: 'Name', minWidth: 150,},
@@ -47,6 +49,7 @@ function Admins() {
     <div className={classes.container}>
         <div className={classes.heading}>
             <h2>Admins</h2>
+            <Link to={'add'}><Button variant='contained'>Add</Button></Link>
         </div>
         {data && <DataTable columns={columns} rows={data}/>}
     </div>

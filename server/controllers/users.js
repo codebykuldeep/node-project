@@ -4,7 +4,7 @@ import { addAdmin, getAllAdmin } from '../lib/admin.js';
 import { getSuperAdmin } from '../lib/superAdmin.js'
 import bcrypt from "bcrypt"
 import passwordGenerator from 'generate-password';
-import { getAllUsers, searchForUser } from '../lib/users.js';
+import { getAllUsers, getUserByOrganization, searchForUser } from '../lib/users.js';
 
 
 async function getUser(req,res) {
@@ -70,6 +70,19 @@ export async function handleGetAllAdmins(req,res) {
 export async function handleGetAllUsers(req,res) {
     try {
         const data = await getAllUsers();
+        return res.json(new actionResponse(200,data,true));
+    } catch (error) {
+        return res.json(new actionResponse(200,{error},false))
+    }
+}
+
+
+export async function handleGetUserByOrg(req,res) {
+    const {id} = req.params;
+    console.log(id);
+    
+    try {
+        const data = await getUserByOrganization(id);
         return res.json(new actionResponse(200,data,true));
     } catch (error) {
         return res.json(new actionResponse(200,{error},false))

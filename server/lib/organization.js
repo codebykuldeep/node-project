@@ -12,3 +12,11 @@ export async function getAllOrganization() {
     
     return res.rows;
 }
+
+
+export async function getOrganization(id) {
+    const res = await db.query(`SELECT * FROM  organization WHERE id = $1 ;`,[id]);
+    
+    
+    return res.rows.length > 0 ? res.rows[0] : undefined;
+}

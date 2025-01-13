@@ -15,10 +15,11 @@ const initialState: UserState  = {
 }
 
 export const userSlice = createSlice({
-  name: 'counter',
+  name: 'user',
   initialState,
   reducers: {
     setUser: (state,action: PayloadAction<UserPlayload>) => {
+      
       state.user = action.payload.user;
     },
     removeState: (state) => {

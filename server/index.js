@@ -7,6 +7,7 @@ import {connectDb} from './db/initDb.js';
 //ROUTES IMPORT
 import userRouter from './routes/users.js'
 import organizationRouter from './routes/organization.js';
+import transactionRouter from './routes/transactions.js'
 import { logger } from './middlewares/helperMiddlewares.js';
 import { auth } from './middlewares/auth.js';
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({extended:true}))
 
 app.use('/user',userRouter);
 app.use('/organization',auth,organizationRouter);
+app.use('/transactions',auth,transactionRouter);
 
 app.get('/',(req,res)=>{
     res.send('hello')

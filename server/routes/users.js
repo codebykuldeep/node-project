@@ -1,6 +1,6 @@
 import express from 'express';
-import { getUser, handleAddAdmin, handleGetAllAdmins, handleGetAllUsers,  } from '../controllers/users.js';
-import { auth, superAdminAuth } from '../middlewares/auth.js';
+import { getUser, handleAddAdmin, handleGetAllAdmins, handleGetAllUsers, handleGetUserByOrg,  } from '../controllers/users.js';
+import { adminAuth, auth, superAdminAuth } from '../middlewares/auth.js';
 import { ApiUserResponse } from '../helpers/Response.js';
 import { generateToken } from '../auth/auth.js';
 
@@ -22,7 +22,7 @@ router.get('/verify',auth,(req,res)=>{
 
 router.post('/login',getUser)
 
-
+router.get('/org/:id',auth,adminAuth,handleGetUserByOrg)
 
 router.get('/admin',auth,superAdminAuth,handleGetAllAdmins)
 

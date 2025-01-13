@@ -65,3 +65,10 @@ export async function getUser(id,email,role) {
     }
     return undefined;
 }
+
+
+export async function getUserByOrganization(id) {
+    const res = await db.query(`SELECT * FROM  users WHERE organization_id = $1 ;`,[id]);
+    
+    return res.rows.length > 0 ? res.rows : undefined;
+}
