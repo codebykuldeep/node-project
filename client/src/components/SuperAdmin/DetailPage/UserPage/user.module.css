@@ -1,0 +1,36 @@
+.container{
+    background-color: white;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.heading{
+    margin: 1rem 0;
+    background-color: rgb(189, 245, 166);
+    color: white;
+    padding: 1rem;
+    text-transform: uppercase;
+    border-radius: 10px;
+}
+
+.detail{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+/* ACTION */
+.action{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

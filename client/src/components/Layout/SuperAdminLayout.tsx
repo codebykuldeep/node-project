@@ -8,7 +8,7 @@ import SearchBar from '../SuperAdmin/UI/SearchBar';
 
 const SideBarProps:ISidebarProps =[
   {
-    heading:'Lists',
+    heading:'Home',
     items:[
       {
         text:'Organization',
@@ -28,17 +28,17 @@ const SideBarProps:ISidebarProps =[
     ],
   },
   {
-    heading:'heading 2',
+    heading:'Profile',
     items:[
       {
-        text:'inbox',
+        text:'Account',
         icon:'icon',
-        link:''
+        link:'account'
       },
       {
-        text:'inbox',
+        text:'logout',
         icon:'icon',
-        link:''
+        link:'logout'
       }
     ],
   }

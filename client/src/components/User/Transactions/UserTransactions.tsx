@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import classes from '../org-user.module.css'
+import classes from './transactions.module.css'
 import TransactionDetail from './TransactionDetail';
 
 const columns: readonly Column[] = [
@@ -24,7 +24,7 @@ const columns: readonly Column[] = [
     { id: 'created_at', label: 'Payment Date', minWidth: 150 },
   ];
 
-function Transactions({id}:{id?:string}) {
+function UserTransactions() {
     const user = useSelector((state:RootState)=>state.userState.user)
   const [data,setData] = useState<ITransaction[] | null>(null);
   const [modalData,setModalData] = useState<ITransaction | null>(null)
@@ -32,8 +32,6 @@ function Transactions({id}:{id?:string}) {
   const [open, setOpen] = useState<boolean>(false);
     const handleOpen = (transaction:ITransaction) =>{
         setModalData(transaction)
-        console.log('setting' ,transaction);
-        
         setOpen(true);
     };
     const handleClose = () => setOpen(false);
@@ -41,18 +39,14 @@ function Transactions({id}:{id?:string}) {
     function updataData(){
         setUpdate(prev=>prev+1);
     }
-  
-  const org_id = id || user!.organization_id;
+    
 
   useEffect(()=>{
     async function getData() {
-        const {data} = await axios.get(env.SERVER +'/transactions/org/'+org_id,{
+        const {data} = await axios.get(env.SERVER +'/transactions/'+user!.id,{
             headers:{
                 'Authorization':getToken(),
             },
-            params:{
-                type:'all'
-            }
         })
         console.log(data);
         
@@ -65,7 +59,7 @@ function Transactions({id}:{id?:string}) {
         console.log(error);
         
     }
-  },[user,update,org_id])
+  },[user,update])
   return (
     <div  className={classes.container}>
         <div className={classes.heading}>
@@ -74,9 +68,8 @@ function Transactions({id}:{id?:string}) {
 
         {data && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={updataData}/>}
         {data && data.length> 0 && <DataTable columns={columns} rows={data} handleOpen={handleOpen}/>}
-        {data && data.length === 0 && <p>No transactions</p>}
     </div>
   )
 }
 
-export default Transactions;
+export default UserTransactions;

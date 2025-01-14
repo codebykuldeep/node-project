@@ -4,39 +4,55 @@ import { Outlet } from 'react-router-dom'
 import NavBar from '../Common/NavBar';
 import { ISidebarProps } from '../../types/uiTypes';
 
+
 const SideBarProps:ISidebarProps =[
   {
-    heading:'Lists',
+    heading:'Home',
     items:[
       {
-        text:'Organization',
+        text:'Dashboard',
         icon:'icon',
-        link:'organizations'
+        link:''
       },
       {
-        text:'Admins',
+        text:'Calender',
         icon:'icon',
-        link:'admins-list'
+        link:''
       },
-      {
-        text:'Users',
-        icon:'icon',
-        link:'users-list'
-      }
     ],
   },
   {
-    heading:'heading 2',
+    heading:'Transactions',
     items:[
       {
-        text:'inbox',
+        text:'Payment List',
         icon:'icon',
-        link:''
+        link:'transactions'
       },
       {
-        text:'inbox',
+        text:'Withdrawal List',
         icon:'icon',
-        link:''
+        link:'withdrawal'
+      },
+      {
+        text:'Withdraw',
+        icon:'icon',
+        link:'withdraw'
+      },
+    ],
+  },
+  {
+    heading:'Account',
+    items:[
+      {
+        text:'Profile',
+        icon:'icon',
+        link:'account'
+      },
+      {
+        text:'Logout',
+        icon:'icon',
+        link:'logout'
       }
     ],
   }

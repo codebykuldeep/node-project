@@ -1,7 +1,7 @@
 import {db} from '../db/initDb.js'
 
 export async function getAllUsers() {
-    const res= await db.query('SELECT user.name AS user , * FROM users INNER JOIN organization ON users.organization_id = organization.id');
+    const res= await db.query('SELECT users.name AS user , * FROM users INNER JOIN organization ON users.organization_id = organization.id ;');
     return res.rows;
 }
 
@@ -71,4 +71,12 @@ export async function getUserByOrganization(id) {
     const res = await db.query(`SELECT * FROM  users WHERE organization_id = $1 ;`,[id]);
     
     return res.rows.length > 0 ? res.rows : undefined;
+}
+
+
+
+//ADMIN QUERIES
+export async function getAdmin(id) {
+    const res = await db.query(`SELECT * FROM admin where id = $1 ;`,[id]);
+    return res.rows.length > 0 ? res.rows[0] : undefined;
 }

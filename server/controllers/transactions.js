@@ -1,5 +1,15 @@
 import { actionResponse } from "../helpers/Response.js";
-import { getAllOrgTransactions, updateTransactionStatus } from "../lib/transactions.js";
+import { getAllOrgTransactions, getUserTransactions, updateTransactionStatus } from "../lib/transactions.js";
+
+export async function handleGetUserTransactions(req,res) {
+    const {id} = req.params;
+    try {
+        const data = await getUserTransactions(id);
+        return res.json(new actionResponse(200,data,true));
+    } catch (error) {
+        return res.json(new actionResponse(200,{error},false))
+    }
+}
 
 export async function handleGetOrgansitionTransactions(req,res) {
     const {id} = req.params;

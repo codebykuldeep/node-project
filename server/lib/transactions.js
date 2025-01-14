@@ -17,9 +17,17 @@ export async function getAllOrgTransactions(id,pending) {
 }
 
 
+
+
 export async function updateTransactionStatus(transaction_id,status) {
     const res = await db.query(`UPDATE transactions SET approved = $1 WHERE transaction_id = $2 ;`,[status,transaction_id])
     console.log(res);
     
     return res;
+}
+
+export async function getUserTransactions(id) {
+    const res = await db.query(`SELECT * FROM transactions WHERE user_id = $1 ;`,[id]);
+     
+    return res.rows;
 }

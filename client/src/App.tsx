@@ -12,14 +12,21 @@ import Admins from './components/SuperAdmin/Admins';
 import Users from './components/SuperAdmin/Users';
 import OrganizationForm from './components/SuperAdmin/form/OrganizationForm';
 import AdminForm from './components/SuperAdmin/form/AdminForm';
-import OrgDetail from './components/SuperAdmin/UI/OrgDetail';
 import OrganizationPage from './components/Admin/OrganizationPage';
-import Logout from './components/Admin/Logout';
+import Logout from './components/Common/Logout';
 import OrgUpdateForm from './components/Admin/Form/OrgUpdateForm';
 import OrgUsers from './components/Admin/OrgUsers';
 import Transactions from './components/Admin/Transactions/Transactions';
 import PendingTransactions from './components/Admin/Transactions/PendingTrasactions';
 import AddUser from './components/Admin/Form/AddUser';
+import Account from './components/Admin/Account';
+import UserTransactions from './components/User/Transactions/UserTransactions';
+import Withdrawal from './components/User/Transactions/Withdrawal';
+import WithdrawPage from './components/User/Transactions/WithdrawPage';
+import OrganizationDetail from './components/SuperAdmin/DetailPage/Organization/OrganizationDetail';
+import AdminDetail from './components/SuperAdmin/DetailPage/Admin/AdminDetail';
+import UserDetail from './components/SuperAdmin/DetailPage/UserPage/UserDetail';
+
 
 const router = createBrowserRouter([
   {
@@ -43,6 +50,26 @@ const router = createBrowserRouter([
           {
             path:'',
             element:<div>HEllo</div>
+          },
+          {
+            path:'transactions',
+            element:<UserTransactions/>
+          },
+          {
+            path:'withdrawal',
+            element:<Withdrawal/>
+          },
+          {
+            path:'withdraw',
+            element:<WithdrawPage/>
+          },
+          {
+            path:'account',
+            element:<Account/>
+          },
+          {
+            path:'logout',
+            element:<Logout/>
           },
         ]
       },
@@ -80,7 +107,7 @@ const router = createBrowserRouter([
           },
           {
             path:'account',
-            element:<div>Account</div>
+            element:<Account/>
           },
           {
             path:'logout',
@@ -106,7 +133,7 @@ const router = createBrowserRouter([
           },
           {
             path:'organizations/:id',
-            element:<OrgDetail/>
+            element:<OrganizationDetail/>
           },
           {
             path:'admins-list',
@@ -117,8 +144,24 @@ const router = createBrowserRouter([
             element:<AdminForm/>
           },
           {
+            path:'admins-list/:id',
+            element:<AdminDetail/>
+          },
+          {
             path:'users-list',
             element:<Users/>
+          },
+          {
+            path:'users-list/:id',
+            element:<UserDetail/>
+          },
+          {
+            path:'account',
+            element:<Account/>
+          },
+          {
+            path:'logout',
+            element:<Logout/>
           }
         ]
       }

@@ -67,9 +67,6 @@ function PendingTransactions() {
     <div className={classes.container}>
       <div className={classes.heading}>
         <h2>Pending Trasactions</h2>
-        <Link to={"add"}>
-          <Button variant="contained">Add</Button>
-        </Link>
       </div>
       {data && (
         <TransactionDetail
