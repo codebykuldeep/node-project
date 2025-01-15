@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import classes from './searchbar.module.css';
 import SearchIcon from '@mui/icons-material/Search';
+import { env } from '../../../helpers/constants';
+import axios from 'axios';
 
 function SearchBar() {
   const [show,SetShow] = useState(false);
 
-  function handleChange(event:React.ChangeEvent<HTMLInputElement>){
+  async function handleChange(event:React.ChangeEvent<HTMLInputElement>){
     if(event.target.value.trim() === ''){
       SetShow(false);
+      const {data} = await axios.get(env.SERVER + '/admin/search',{
+        params:{
+          query:
+        }
+      })
     }
     else{
       SetShow(true);

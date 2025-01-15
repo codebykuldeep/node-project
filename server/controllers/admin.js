@@ -1,6 +1,7 @@
 import { actionResponse } from "../helpers/Response.js";
 import { addAdmin } from "../lib/admin.js";
 import bcrypt from "bcrypt"
+import { searchOrganizations } from "../lib/organization.js";
 
 export async function handleAdminRegister(req,res){
     
@@ -18,4 +19,16 @@ export async function handleAdminRegister(req,res){
         return res.json(new actionResponse(200,{error},false))
    }
     
+}
+
+
+export async function handleSearch(req,res) {
+     const {query} = req.query;
+     try{
+          const organization = await searchOrganizations(query);
+          return res.json(new actionResponse(200,{organization},true))
+     }
+     catch(error){
+          return res.json(new actionResponse(500,{error},false))
+     }
 }
