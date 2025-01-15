@@ -4,12 +4,13 @@ import { IUser } from '../../types/dataTypes';
 import { env } from '../../helpers/constants';
 import axios from 'axios';
 import { getToken } from '../../helpers/utilityFns';
-import { Column } from '../../types/uiTypes';
+import { Column, RadioDataTypeForTable } from '../../types/uiTypes';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import classes from './org-user.module.css'
+import SelectTypeRadio from '../Common/SelectTypeRadio';
 
 const columns: readonly Column[] = [
     { id: 'name', label: 'Name', minWidth: 150,},
@@ -27,7 +28,8 @@ const columns: readonly Column[] = [
 
 function OrgUsers() {
     const user = useSelector((state:RootState)=>state.userState.user)
-  const [data,setData] = useState<IUser[] | null>(null);
+    const [data,setData] = useState<IUser[] | null>(null);
+    const [rows,setRows] = useState<IUser[] | null>(null);
   useEffect(()=>{
     async function getData() {
         const {data} = await axios.get(env.SERVER +'/user/org/'+user!.organization_id,{
@@ -37,8 +39,8 @@ function OrgUsers() {
         })
         console.log(data);
         
-        setData(data.data)
-
+        setData(data.data);
+        setRows(data.data);
     }
     try {
         getData();
@@ -47,15 +49,33 @@ function OrgUsers() {
         
     }
   },[])
+  function handleDataType(action:RadioDataTypeForTable){
+            let newRows = data;
+            if(data && action === 'disabled'){
+                newRows = data.filter((entry)=>Boolean(entry.status) === false)
+            }
+            else if(data && action === 'active'){
+                newRows = data.filter((entry)=>Boolean(entry.status) === true)
+            }
+            console.log(action);
+            
+            setRows(newRows);
+            
+        }
   return (
-    <div  className={classes.container}>
-        <div className={classes.heading}>
-            <h2>Users</h2>
-            <Link to={'add'}><Button variant='contained'>Add</Button></Link>
-        </div>
-        {data && data.length> 0 && <DataTable columns={columns} rows={data}/>}
+    <div className={classes.container}>
+      <div className={classes.heading}>
+        <h2>Users</h2>
+        <Link to={"add"}>
+          <Button variant="contained">Add</Button>
+        </Link>
+      </div>
+      <div>
+        <SelectTypeRadio onChange={handleDataType} />
+      </div>
+      {data && rows && rows.length > 0 && <DataTable columns={columns} rows={rows} />}
     </div>
-  )
+  );
 }
 
 export default OrgUsers;

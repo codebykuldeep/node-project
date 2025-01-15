@@ -1,15 +1,16 @@
 import {db} from '../db/initDb.js'
 
 export async function getAllUsers() {
-    const res= await db.query('SELECT users.name AS user , * FROM users INNER JOIN organization ON users.organization_id = organization.id ;');
+    //const res= await db.query('SELECT users.name AS user,user.status AS status, organization.status AS org_status , * FROM users INNER JOIN organization ON users.organization_id = organization.id ;');
+    const res  = await db.query('SELECT * FROM users ; ')
     return res.rows;
 }
 
 
-export async function addUsers(name,email,password,number) {
-    const res = await db.query(`INSERT INTO users (name, email, password,number) VALUES ( $1, $2, $3 , $4) RETURNING *;`,[name,email,password,number]);
+export async function addUsers(name,email,password,number,interest,id) {
+    const res = await db.query(`INSERT INTO users (name, email, password,number,interest,organization_id) VALUES( $1, $2, $3 , $4, $5,$6) RETURNING *;`,[name,email,password,number,interest,id]);
     console.log(res);
-    
+    return res;
 }
 
 
@@ -41,9 +42,6 @@ export async function  searchForUser(email) {
     throw new Error('user not exists')
 
 }
-
-
-
 export async function getUser(id,email,role) {
     let result;
     if(role === 'SUPER_ADMIN'){
@@ -67,12 +65,46 @@ export async function getUser(id,email,role) {
 }
 
 
+
+export async function updateUser(id,email,name,number,role) {
+    let result;
+    if(role === 'SUPER_ADMIN'){
+        result = await db.query('UPDATE super_admin SET email = $1 , name = $2 , number = $3 WHERE id = $4 ;',[email,name,number,id]);
+    }
+    else if(role === 'ADMIN'){
+        result = await db.query('UPDATE admin SET email = $1 , name = $2 , number = $3 WHERE id = $4 ;',[email,name,number,id]);
+    }
+    else{
+        result = await db.query('UPDATE users SET email = $1 , name = $2 , number = $3 WHERE id = $4 ;',[email,name,number,id]);
+    }
+    return res
+}
+
+
+export async function getSpecificUser(id){
+    const res = await db.query(`SELECT * FROM users where id = $1 ;`,[id]);
+
+    return res.rows.length > 0 ? res.rows[0] : undefined;
+}
+
+
 export async function getUserByOrganization(id) {
     const res = await db.query(`SELECT * FROM  users WHERE organization_id = $1 ;`,[id]);
     
     return res.rows.length > 0 ? res.rows : undefined;
 }
 
+
+export async function switchUserStatus(id,status,role) {
+    let res;
+    if(role === 'ADMIN'){
+        res = await db.query(`UPDATE admin SET status = $1 WHERE id = $2 ;`,[status,id]);
+    }
+    else{
+        res = await db.query(`UPDATE users SET status = $1 WHERE id = $2 ;`,[status,id]);
+    }
+    return res.rows;
+}
 
 
 //ADMIN QUERIES

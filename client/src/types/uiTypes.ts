@@ -20,3 +20,6 @@ export interface Column {
   format?: <T,U>(value: T) => U;
   actionElement?:React.ReactNode;
 }
+
+
+export type RadioDataTypeForTable = 'all' | 'disabled' | 'active';

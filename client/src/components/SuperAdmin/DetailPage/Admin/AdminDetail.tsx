@@ -20,6 +20,8 @@ function AdminDetail() {
                     'Authorization':getToken(),
                 }
             })
+            console.log(data.data);
+            
             setData(data.data.admin);
             
         }
@@ -50,7 +52,7 @@ function AdminDetail() {
                     <div><span>Phone number :</span><p>{data.number}</p></div>
                     <div><span>Organization id:</span><p>{data.organization_id}</p></div>
                 </div>
-                <ActionButton status={Boolean(data.status)}/>
+                <ActionButton data={data} />
                 </div>
             )
         }
