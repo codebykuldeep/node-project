@@ -71,7 +71,7 @@ async function transactionSchema() {
         transaction_id uuid default gen_random_uuid(),
         amount INTEGER,
         image_url VARCHAR,
-        approved BOOLEAN DEFAULT false,
+        approved BOOLEAN DEFAULT NULL,
         organization_id INTEGER,
         user_id INTEGER,
         created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,

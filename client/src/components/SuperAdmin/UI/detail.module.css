@@ -1,0 +1,15 @@
+.container{
+    margin: 1rem;
+    background-color: white;
+    padding: 1rem;
+}
+
+.heading{
+    margin: 0 0.5rem;
+}
+
+.detail{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

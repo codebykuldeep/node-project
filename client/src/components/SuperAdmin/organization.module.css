@@ -1,0 +1,11 @@
+.container{
+    padding: 0 1rem;
+}
+
+.heading{
+    text-transform: uppercase;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

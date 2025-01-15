@@ -1,0 +1,21 @@
+.container{
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.heading{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem 0;
+    
+}
+
+.btn{
+    all: unset;
+    cursor: pointer;
+    
+}
+.btn:hover{
+    color: rgb(102, 102, 102);
+}

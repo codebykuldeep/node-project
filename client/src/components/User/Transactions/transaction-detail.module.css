@@ -1,0 +1,36 @@
+.btn_list{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.detail{
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.info{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.head{
+    margin-bottom: 1rem;
+}
+.info p{
+    padding: 10px 0;
+}
+.info p span{
+    font-weight: 600;
+}
+
+.img{
+    width: 50%;
+}
+.img img{
+    width: auto;
+    max-height: 500px;
+}
