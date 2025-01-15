@@ -94,6 +94,10 @@ const router = createBrowserRouter([
             element:<OrgUsers/>
           },
           {
+            path:'users-list/:id',
+            element:<UserDetail/>
+          },
+          {
             path:'users-list/add',
             element:<AddUser/>
           },

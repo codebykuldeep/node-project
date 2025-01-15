@@ -4,6 +4,11 @@ import classes from './form.module.css';
 import { Button} from '@mui/material';
 import { ErrorState } from '../../../types/errorTypes';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
+import { getToken } from '../../../helpers/utilityFns';
+import { env } from '../../../helpers/constants';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 const initialformState ={
   name:{
@@ -30,6 +35,7 @@ const initialformState ={
 
 
 function AddUser() {
+  const user = useSelector((state:RootState)=>state.userState.user)
   const [formState,setFormState] = useState<ErrorState>(initialformState);
   
     function handleFormChange(event:React.ChangeEvent<HTMLInputElement>){
@@ -48,12 +54,30 @@ function AddUser() {
         }
       }))  
     }
-    function handleSubmit(event:React.FormEvent<HTMLFormElement>){
+
+
+    async function handleSubmit(event:React.FormEvent<HTMLFormElement>){
       event.preventDefault();
       console.log(formState);
       
       if(checkValidFormState(formState)){
-        alert('succces')
+        const formData = new FormData(event.target as HTMLFormElement);
+      const body = Object.fromEntries(formData.entries());
+      console.log(body);
+      const res = await axios.post(
+        env.SERVER + "/user/register",
+        {
+          ...body,
+          organization_id:user!.organization_id
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getToken(),
+          },
+        }
+      );
+      alert('success');
       }
       else{
         setFormState(populateFormState(formState));

@@ -1,7 +1,7 @@
 import {db} from '../db/initDb.js'
 
 export async function getAllAdmin() {
-    const res = await db.query(`SELECT admin.name AS admin ,* FROM admin INNER JOIN organization ON admin.organization_id = organization.id;`);
+    const res = await db.query(`SELECT admin.id AS admin_id , admin.name AS admin, organization.status AS org_status, admin.status AS admin_status ,* FROM admin INNER JOIN organization ON admin.organization_id = organization.id;`);
     return res.rows;
 }
 

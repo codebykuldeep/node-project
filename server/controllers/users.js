@@ -4,7 +4,7 @@ import { addAdmin, getAllAdmin } from '../lib/admin.js';
 import { getSuperAdmin } from '../lib/superAdmin.js'
 import bcrypt from "bcrypt"
 import passwordGenerator from 'generate-password';
-import { getAdmin, getAllUsers, getUserByOrganization, searchForUser } from '../lib/users.js';
+import { addUsers, getAdmin, getAllUsers, getSpecificUser, getUserByOrganization, searchForUser, switchUserStatus, updateUser } from '../lib/users.js';
 
 
 async function getUser(req,res) {
@@ -105,6 +105,66 @@ export async function handleGetAdmin(req,res) {
     }
 }
 
+
+export async function handleUserStatus(req,res) {
+    const {id,status,role} = req.query;
+
+    try {
+        const data = await switchUserStatus(id,status,role)
+        return res.json(new actionResponse(200,data,true)); 
+    } catch (error) {
+        return res.json(new actionResponse(500,undefined,false));
+    }
+}
+
+
+export async function handleGetUserDetails(req,res) {
+    const {id} = req.params;
+    try {
+        const user  = await getSpecificUser(id);
+        if(user){
+            console.log(user);
+            
+            return res.json(new actionResponse(200,{user},true)); 
+        }
+        return res.json(new actionResponse(200,undefined,true));
+    } catch (error) {
+        return res.json(new actionResponse(500,error,true));
+    }
+}
+
+export async function handleUpdateUser(req,res) {
+    const {name,email,number,role} = req.body;
+    const id = req.user.id;
+
+    try {
+        
+        const data = await updateUser(id,email,name,number,role);
+        return res.json(new actionResponse(500,data,true));
+    } catch (error) {
+        return res.json(new actionResponse(500,error,false));
+    }
+    
+}
+
+
+
+export async function handleCreateUser(req,res){
+    console.log(req.body);
+    const {name ,email ,number ,interest ,organization_id } =req.body; 
+    
+    try {
+        // const password = passwordGenerator({length:10,number:true});
+        // const hashPassword = await bcrypt.hash(password,3);
+        const hashPassword = '123456';
+        const data = await addUsers(name,email,hashPassword,number,interest,organization_id);
+        return res.json(new actionResponse(200,data,true));
+    } catch (error) {
+        console.log(error);
+        
+        return res.json(new actionResponse(500,error,false));
+    }
+}
 
 
 export {getUser,handleAddAdmin}

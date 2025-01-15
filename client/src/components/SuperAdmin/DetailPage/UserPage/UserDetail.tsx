@@ -15,12 +15,12 @@ function UserDetail() {
     const [data,setData] = useState<IUser | null>(null);
     useEffect(()=>{
         async function getData() {
-            const {data} = await axios.get(env.SERVER +'/user/admin/'+id,{
+            const {data} = await axios.get(env.SERVER +'/user/detail/'+id,{
                 headers:{
                     'Authorization':getToken(),
                 }
             })
-            setData(data.data.admin);
+            setData(data.data.user);
             
         }
         try {
@@ -50,7 +50,7 @@ function UserDetail() {
                     <div><span>Phone number :</span><p>{data.number}</p></div>
                     <div><span>Organization id:</span><p>{data.organization_id}</p></div>
                 </div>
-                <ActionButton status={Boolean(data.status)}/>
+                <ActionButton data={data}/>
                 </div>
             )
         }
