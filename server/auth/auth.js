@@ -1,10 +1,10 @@
 import  jwt from 'jsonwebtoken';
-import env from '../constants.js'
+import config from '../constants.js'
 
 function generateToken(payload,expiry='24h'){
     const token = jwt.sign(
         payload,
-        env.SECRET,
+        config.SECRET,
         {
             expiresIn:expiry
         }
@@ -13,7 +13,7 @@ function generateToken(payload,expiry='24h'){
 }
 
 function verifyUser(token){
-    const payload = jwt.verify(token,env.SECRET)
+    const payload = jwt.verify(token,config.SECRET)
     return payload;
 }
 

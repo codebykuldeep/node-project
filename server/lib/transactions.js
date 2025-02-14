@@ -16,6 +16,11 @@ export async function getAllOrgTransactions(id,pending) {
     return res.rows;
 }
 
+export async function createNewTransaction(amount,organization_id,user_id,image,date) {
+    const res = await db.query('INSERT INTO transactions(amount,organization_id,user_id,image_url,created_at) VALUES( $1 ,$2 ,$3 ,$4 , $5);',[amount,organization_id,user_id,image,date]);
+    return res;
+}
+
 
 
 

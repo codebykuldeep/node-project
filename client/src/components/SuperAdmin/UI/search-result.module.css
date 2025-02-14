@@ -1,0 +1,16 @@
+.container{
+    padding: 1rem;
+}
+
+.result_box{
+    border-bottom: 1px solid black;
+    padding-bottom: 1rem;
+}
+
+.result_box:last-child{
+    border-bottom:none;
+}
+
+.heading{
+    padding: 0.5rem 0;
+}

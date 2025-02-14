@@ -6,7 +6,7 @@ import { ITransaction } from '../../../types/dataTypes';
 import classes from './transaction-detail.module.css'
 import { Button } from '@mui/material';
 import axios from 'axios';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 import { getToken } from '../../../helpers/utilityFns';
 
 const style = {
@@ -35,7 +35,7 @@ export default function TransactionDetail({open,handleClose,data,updateData}:Tra
     
     
     async function updateStatus(status:boolean) {
-        const response = await axios.get(env.SERVER+'/transactions/org/update',{
+        const response = await axios.get(constant.SERVER+'/transactions/org/update',{
             params:{
                 status:status,
                 transaction_id:data.transaction_id,

@@ -20,10 +20,10 @@ export default function SelectTypeRadio({onChange}:SelectTypeRadioProps) {
     
   return (
     <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">Filter by</FormLabel>
+      <FormLabel id="radio-button">Filter by</FormLabel>
       <RadioGroup
         row
-        aria-labelledby="demo-row-radio-buttons-group-label"
+        aria-labelledby="radio-button"
         name="row-radio-buttons-group"
         onChange={handleChange}
         value={state}

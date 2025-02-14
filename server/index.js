@@ -10,10 +10,12 @@ import { auth } from './middlewares/auth.js';
 
 
 //ROUTES IMPORT
+import commonRouter from './routes/common.js';
 import userRouter from './routes/users.js'
 import organizationRouter from './routes/organization.js';
 import transactionRouter from './routes/transactions.js'
 import AdminRouter from './routes/admin.js'
+import withdrawalRouter from './routes/withdrawals.js';
 
 
 
@@ -31,10 +33,13 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+
+app.use('/',commonRouter)
 app.use('/user',userRouter);
 app.use('/admin',auth,AdminRouter);
 app.use('/organization',auth,organizationRouter);
 app.use('/transactions',auth,transactionRouter);
+app.use('/withdrawals',auth,withdrawalRouter)
 
 app.get('/',(req,res)=>{
     res.send('hello')

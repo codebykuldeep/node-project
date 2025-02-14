@@ -38,6 +38,11 @@ const SideBarProps:ISidebarProps =[
         text:'Pendings',
         icon:'icon',
         link:'pending'
+      },
+      {
+        text:'Withdrawals Req',
+        icon:'icon',
+        link:'withdrawals'
       }
     ],
   },

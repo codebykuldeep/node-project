@@ -1,4 +1,5 @@
 export function logger(req,res,next){
-    console.log(req.method +" "+req.url + "  " + new Date());
+    const date = new Date().toLocaleTimeString();
+    console.log(req.method +" "+req.url + "  " + date);
     next();
 }

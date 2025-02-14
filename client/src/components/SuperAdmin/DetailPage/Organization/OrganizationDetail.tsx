@@ -4,37 +4,29 @@ import { IOrganization } from '../../../../types/dataTypes';
 import axios from 'axios';
 import { getToken } from '../../../../helpers/utilityFns';
 import classes from './organization.module.css'
-import { env } from '../../../../helpers/constants';
+import { constant } from '../../../../helpers/constants';
 import { Button } from '@mui/material';
 import ActionButton from './ActionButton';
 import Transactions from '../../../Admin/Transactions/Transactions';
+import { useFetch } from '../../../../helpers/useFetch';
 
 function OrganizationDetail() {
     const {id} = useParams();
     
-    const [data,setData] = useState<IOrganization | null>(null);
+    //const [data,setData] = useState<IOrganization | null>(null);
     const [update,setUpdate] = useState(1);
-    useEffect(()=>{
-        async function getData() {
-            const {data} = await axios.get(env.SERVER +'/organization/'+id,{
-                headers:{
-                    'Authorization':getToken(),
-                }
-            })
-            setData(data.data.organization);
-            
-        }
-        try {
-            getData();
-        } catch (error) {
-            console.log(error);
-            
-        }
-    },[id,update])
-
-    console.log(data?.id);
+    const [fetchedData,loading,error] = useFetch<IOrganization>('/organization/'+id)
+        
+    let data: IOrganization;
+    if (!error) {
+      data = fetchedData as IOrganization;
+    } else {
+      return <p>Error while loading page</p>;
+    }
     
-    if(!data){
+    console.log(data);
+    
+    if(loading){
         return <p>Loading....</p>;
     }
     function triggerUpdate(){

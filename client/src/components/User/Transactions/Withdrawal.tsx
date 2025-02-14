@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import DataTable from '../UI/DataTable';
 import { ITransaction } from '../../../types/dataTypes';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 import axios from 'axios';
 import { getToken } from '../../../helpers/utilityFns';
 import { Column } from '../../../types/uiTypes';
@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import classes from './transactions.module.css'
 import TransactionDetail from './TransactionDetail';
+import { useFetch } from '../../../helpers/useFetch';
+import Loading from '../../Common/Loading';
 
 const columns: readonly Column[] = [
     { id: 'user_id', label: 'User ID', minWidth: 150,},
@@ -21,52 +23,41 @@ const columns: readonly Column[] = [
         minWidth: 170,
         align: 'center',
     },
-    { id: 'created_at', label: 'Payment Date', minWidth: 150 },
+    { id: 'created_at', label: 'Withdrawal Req Date', minWidth: 150 },
   ];
 
 function Withdrawal() {
-    const user = useSelector((state:RootState)=>state.userState.user)
-  const [data,setData] = useState<ITransaction[] | null>(null);
-  const [modalData,setModalData] = useState<ITransaction | null>(null)
-    const [update,setUpdate] = useState(1);
+  const user = useSelector((state: RootState) => state.userState.user);
+  const [modalData, setModalData] = useState<ITransaction | null>(null);
   const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = (transaction:ITransaction) =>{
-        setModalData(transaction)
-        setOpen(true);
-    };
-    const handleClose = () => setOpen(false);
+  const [fetchData, loading, error, update] = useFetch(
+    "/withdrawals/" + user!.id
+  );
+  let data: ITransaction[];
+  if (!error) {
+    data = fetchData as ITransaction[];
+  } else {
+    return <p>Error While Loading Page</p>;
+  }
 
-    function updataData(){
-        setUpdate(prev=>prev+1);
-    }
+  const handleOpen = (transaction: ITransaction) => {
+    setModalData(transaction);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
     
 
-  useEffect(()=>{
-    async function getData() {
-        const {data} = await axios.get(env.SERVER +'/transactions/'+user!.id,{
-            headers:{
-                'Authorization':getToken(),
-            },
-        })
-        console.log(data);
-        
-        setData(data.data)
+  if(loading){
+    return <Loading/>
+  }
 
-    }
-    try {
-        getData();
-    } catch (error) {
-        console.log(error);
-        
-    }
-  },[user,update])
   return (
     <div  className={classes.container}>
         <div className={classes.heading}>
             <h2>Withdrawal History</h2>
         </div>
-
-        {data && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={updataData}/>}
+        {data && data.length === 0 && <p>No withdrawals history</p>}
+        {data && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={update as ()=>void}/>}
         {data && data.length> 0 && <DataTable columns={columns} rows={data} handleOpen={handleOpen}/>}
     </div>
   )

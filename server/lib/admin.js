@@ -12,4 +12,10 @@ export async function addAdmin(name,email,password,number,organization_id) {
 }
 
 
+export async function searchAdmin(query) {
+    const res = await db.query('SELECT * FROM admin WHERE name LIKE $1 ;',['%'+query+'%'])
+    return res.rows;
+}
+
+
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "../UI/DataTable";
 import { ITransaction, IUser } from "../../../types/dataTypes";
-import { env } from "../../../helpers/constants";
+import { constant } from "../../../helpers/constants";
 import axios from "axios";
 import { getToken } from "../../../helpers/utilityFns";
 import { Column } from "../../../types/uiTypes";
@@ -43,7 +43,7 @@ function PendingTransactions() {
   useEffect(() => {
     async function getData() {
       const { data } = await axios.get(
-        env.SERVER + "/transactions/org/" + user!.organization_id,
+        constant.SERVER + "/transactions/org/" + user!.organization_id,
         {
           headers: {
             Authorization: getToken(),

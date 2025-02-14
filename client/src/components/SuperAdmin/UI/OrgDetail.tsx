@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { IOrganization } from '../../../types/dataTypes';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 import axios from 'axios';
 import { getToken } from '../../../helpers/utilityFns';
 import { useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ function OrgDetail() {
     const [data,setData] = useState<IOrganization | null>(null);
     useEffect(()=>{
         async function getData() {
-            const {data} = await axios.get(env.SERVER +'/organization',{
+            const {data} = await axios.get(constant.SERVER +'/organization',{
                 headers:{
                     'Authorization':getToken(),
                 }

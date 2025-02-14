@@ -5,7 +5,7 @@ import { Button} from '@mui/material';
 import { ErrorState } from '../../../types/errorTypes';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
 import { getToken } from '../../../helpers/utilityFns';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
@@ -65,7 +65,7 @@ function AddUser() {
       const body = Object.fromEntries(formData.entries());
       console.log(body);
       const res = await axios.post(
-        env.SERVER + "/user/register",
+        constant.SERVER + "/user/register",
         {
           ...body,
           organization_id:user!.organization_id

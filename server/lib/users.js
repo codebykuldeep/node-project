@@ -42,23 +42,26 @@ export async function  searchForUser(email) {
     throw new Error('user not exists')
 
 }
-export async function getUser(id,email,role) {
+export async function getUser(user) {
     let result;
+    const {email,role} = user;
     if(role === 'SUPER_ADMIN'){
-        result = await db.query('SELECT * FROM super_admin WHERE id = $1 AND LOWER(email) = $2 ;',[id,email]);
+        const id = user.super_id;
+        result = await db.query('SELECT * FROM super_admin WHERE super_id = $1 AND LOWER(email) = $2 ;',[id,email]);
     }
     else if(role === 'ADMIN'){
-        result = await db.query('SELECT * FROM admin WHERE id = $1 AND LOWER(email) = $2 ;',[id,email]);
+        const id = user.admin_id;
+        result = await db.query('SELECT * FROM admin WHERE admin_id = $1 AND LOWER(email) = $2 ;',[id,email]);
     }
     else{
-        result = await db.query('SELECT * FROM users WHERE id = $1 AND LOWER(email) = $2 ;',[id,email]);
+        const id = user.user_id;
+        result = await db.query('SELECT * FROM users WHERE user_id = $1 AND LOWER(email) = $2 ;',[id,email]);
     }
     
     
     if(result.rows.length > 0){
         const user  = result.rows[0];
         user.role = role;
-        
         return user;
     }
     return undefined;
@@ -105,6 +108,12 @@ export async function switchUserStatus(id,status,role) {
     }
     return res.rows;
 }
+
+export async function searchUsers(query) {
+    const res = await db.query('SELECT * FROM users WHERE name LIKE $1 ;',['%'+query+'%'])
+    return res.rows;
+}
+
 
 
 //ADMIN QUERIES

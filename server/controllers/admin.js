@@ -1,7 +1,8 @@
 import { actionResponse } from "../helpers/Response.js";
-import { addAdmin } from "../lib/admin.js";
+import { addAdmin, searchAdmin } from "../lib/admin.js";
 import bcrypt from "bcrypt"
 import { searchOrganizations } from "../lib/organization.js";
+import { searchUsers } from "../lib/users.js";
 
 export async function handleAdminRegister(req,res){
     
@@ -14,9 +15,9 @@ export async function handleAdminRegister(req,res){
         const hashPassword = '123456';
         const addUserData = await addAdmin(name,email,hashPassword,number,organization_id);
         delete addUserData.password;
-        return res.json(new actionResponse(200,{user:addUserData},true));
+        return res.json(new actionResponse(200,data,true));
    } catch (error) {
-        return res.json(new actionResponse(200,{error},false))
+        return res.json(new actionResponse(500,error,false))
    }
     
 }
@@ -25,10 +26,14 @@ export async function handleAdminRegister(req,res){
 export async function handleSearch(req,res) {
      const {query} = req.query;
      try{
-          const organization = await searchOrganizations(query);
-          return res.json(new actionResponse(200,{organization},true))
+          const result = await Promise.all([searchOrganizations(query),searchAdmin(query),searchUsers(query)]);
+          return res.json(new actionResponse(200,{
+               organizations:result[0],
+               admins:result[1],
+               users:result[2]
+          },true))
      }
      catch(error){
-          return res.json(new actionResponse(500,{error},false))
+          return res.json(new actionResponse(500,error,false))
      }
 }

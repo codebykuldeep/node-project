@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import DataTable from '../Common/DataTable';
 import classes from './organization.module.css'
 import { IUser } from '../../types/dataTypes';
-import { env } from '../../helpers/constants';
+import { constant } from '../../helpers/constants';
 import axios from 'axios';
 import { getToken } from '../../helpers/utilityFns';
 import { Column, RadioDataTypeForTable } from '../../types/uiTypes';
@@ -29,7 +29,7 @@ function Users() {
   const [rows,setRows] = useState<IUser[] | null>(null);
   useEffect(()=>{
     async function getData() {
-        const {data} = await axios.get(env.SERVER +'/user/',{
+        const {data} = await axios.get(constant.SERVER +'/user/',{
             headers:{
                 'Authorization':getToken(),
             }

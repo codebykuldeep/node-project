@@ -7,7 +7,7 @@ import { ErrorState } from '../../../types/errorTypes';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
 import { getToken } from '../../../helpers/utilityFns';
 import axios from 'axios';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 
 interface Props{
     user:IUser;
@@ -38,7 +38,7 @@ function UpdateAccount({user}:Props) {
       const body = Object.fromEntries(formData.entries());
   
       
-      const {data} = await axios.post(env.SERVER+'/user/update',{
+      const {data} = await axios.post(constant.SERVER+'/user/update',{
         ...body,
         role:user.role
       },{

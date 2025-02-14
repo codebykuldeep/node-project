@@ -14,7 +14,8 @@ import {
 } from "../../../utils/validationMethods";
 import { getToken } from "../../../helpers/utilityFns";
 import axios from "axios";
-import { env } from "../../../helpers/constants";
+import { constant } from "../../../helpers/constants";
+import { useFetch } from "../../../helpers/useFetch";
 
 const initialformState = {
   name: {
@@ -44,20 +45,15 @@ function OrgUpdateForm() {
 
   const [formState, setFormState] = useState<ErrorState>(initialformState);
 
-  const [data, setData] = useState<IOrganization | null>(null);
-  console.log(data);
+  const [fetchedData,loading,error] = useFetch<IOrganization>('/organization/'+ user!.organization_id)
+      
+  let data: IOrganization;
+  if (!error) {
+    data = fetchedData as IOrganization;
+  } else {
+    return <p>Error while loading page</p>;
+  }
 
-  useEffect(() => {
-    try {
-      getOrganizationData(user!.organization_id).then((data) => {
-        setFormState(generateFormState(initialformState, data));
-        setData(data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, [user]);
-  console.log(formState);
 
   function handleFormChange(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
@@ -82,7 +78,7 @@ function OrgUpdateForm() {
       const body = Object.fromEntries(formData.entries());
       console.log(body);
       const res = await axios.post(
-        env.SERVER + "/organization/update",
+        constant.SERVER + "/organization/update",
         {
           ...body,
           id:data!.id,
@@ -123,7 +119,7 @@ function OrgUpdateForm() {
     }
   }
 
-  if (!data) {
+  if (loading) {
     return <p>Loading...</p>;
   }
   return (

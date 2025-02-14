@@ -1,0 +1,12 @@
+.conatiner{
+    width: 100%;
+    height: 100vh;
+}
+
+.heading{
+    margin:  1rem 0;
+    color: rgb(77, 72, 72);
+    padding-left: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
