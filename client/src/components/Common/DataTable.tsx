@@ -86,9 +86,10 @@ interface DataTableProps{
   columns:readonly Column[],
   rows:IOrganization[] | IUser[] | ITransaction[],
   handleOpen?:(data:ITransaction)=>void;
+  idName?:string;
 }
 
-export default function StickyHeadTable({columns,rows,handleOpen}:DataTableProps) {
+export default function StickyHeadTable({columns,rows,handleOpen,idName}:DataTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -143,7 +144,7 @@ export default function StickyHeadTable({columns,rows,handleOpen}:DataTableProps
                         value = Boolean(row[column.id]) ? '🟢' : '🔴';
                       }
                       
-                      const link = row.id
+                      const link = idName ? row[idName] :row.id ;
                       
                       return (
                         <TableCell key={column.id} align={column.align}>

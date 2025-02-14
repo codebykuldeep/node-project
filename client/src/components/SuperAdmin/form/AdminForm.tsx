@@ -74,12 +74,24 @@ function AdminForm() {
           }
         }))  
       }
-      function handleSubmit(event:React.FormEvent<HTMLFormElement>){
+      async function handleSubmit(event:React.FormEvent<HTMLFormElement>){
         event.preventDefault();
         console.log(formState);
         
         if(checkValidFormState(formState)){
-          alert('succces')
+          const formData = new FormData(event.target as HTMLFormElement );
+          const body = Object.fromEntries(formData.entries());
+          console.log(body);
+          
+          const {data} = await axios.post(env.SERVER+'/admin/register',body,{
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization':getToken()
+            }
+          })
+          alert(data.data.success)
+          setFormState(initialformState);
+          (event.target as HTMLFormElement).reset();
         }
         else{
           setFormState(populateFormState(formState));

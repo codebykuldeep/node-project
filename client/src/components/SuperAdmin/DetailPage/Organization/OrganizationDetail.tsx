@@ -13,6 +13,7 @@ function OrganizationDetail() {
     const {id} = useParams();
     
     const [data,setData] = useState<IOrganization | null>(null);
+    const [update,setUpdate] = useState(1);
     useEffect(()=>{
         async function getData() {
             const {data} = await axios.get(env.SERVER +'/organization/'+id,{
@@ -29,12 +30,15 @@ function OrganizationDetail() {
             console.log(error);
             
         }
-    },[])
+    },[id,update])
 
     console.log(data?.id);
     
     if(!data){
         return <p>Loading....</p>;
+    }
+    function triggerUpdate(){
+        setUpdate(prev=>prev+1);
     }
   return (
     <div>
@@ -49,7 +53,7 @@ function OrganizationDetail() {
                     <div><span>Description :</span><p>{data.description}</p></div>
                     <div><span>Id :</span><p>{data.id}</p></div>
                 </div>
-                <ActionButton status={Boolean(data.status)}/>
+                <ActionButton organization={data} triggerUpdate={triggerUpdate}/>
                 <div>
                     <Transactions id={data.id}/>
                 </div>

@@ -5,6 +5,9 @@ import { Button } from '@mui/material';
 import { IOrganization, IUser } from '../../../types/dataTypes';
 import { ErrorState } from '../../../types/errorTypes';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
+import { getToken } from '../../../helpers/utilityFns';
+import axios from 'axios';
+import { env } from '../../../helpers/constants';
 
 interface Props{
     user:IUser;
@@ -12,34 +15,46 @@ interface Props{
 
 function UpdateAccount({user}:Props) {
   const [formState,setFormState] = useState<ErrorState>( generateFormState({},user));
-  function handleFormChange(event:React.ChangeEvent<HTMLInputElement>){
-            
-            
-            const name = event.target.name;
-            const value = event.target.value;
-        
-            const [msg,status] = validation(name,value)
-            setFormState((prev)=>({
-              ...prev,
-              [name]:{
-                message:msg,
-                status:status,
-                value:value
-              }
-            }))  
-          }
-          function handleSubmit(event:React.FormEvent<HTMLFormElement>){
-            event.preventDefault();
-            console.log(formState);
-            
-            if(checkValidFormState(formState)){
-              alert('succces')
-            }
-            else{
-              setFormState(populateFormState(formState));
-              alert('failed')
-            }
-          }
+  function handleFormChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    const [msg, status] = validation(name, value);
+    setFormState((prev) => ({
+      ...prev,
+      [name]: {
+        message: msg,
+        status: status,
+        value: value,
+      },
+    }));
+  }
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log(formState);
+
+    if (checkValidFormState(formState)) {
+      const formData = new FormData(event.target as HTMLFormElement );
+      const body = Object.fromEntries(formData.entries());
+  
+      
+      const {data} = await axios.post(env.SERVER+'/user/update',{
+        ...body,
+        role:user.role
+      },{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':getToken()
+        },
+      })
+      
+      alert(data.data.success)
+      setFormState(generateFormState({},user));
+    } else {
+      setFormState(populateFormState(formState));
+      alert("failed");
+    }
+  }
 
   return (
     <div className={classes.container}>

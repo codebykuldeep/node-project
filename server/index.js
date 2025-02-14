@@ -4,12 +4,16 @@ import env from './constants.js'
 import {connectDb} from './db/initDb.js';
 
 
+//MIDDLEWARES
+import { logger } from './middlewares/helperMiddlewares.js';
+import { auth } from './middlewares/auth.js';
+
+
 //ROUTES IMPORT
 import userRouter from './routes/users.js'
 import organizationRouter from './routes/organization.js';
 import transactionRouter from './routes/transactions.js'
-import { logger } from './middlewares/helperMiddlewares.js';
-import { auth } from './middlewares/auth.js';
+import AdminRouter from './routes/admin.js'
 
 
 
@@ -28,6 +32,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 app.use('/user',userRouter);
+app.use('/admin',auth,AdminRouter);
 app.use('/organization',auth,organizationRouter);
 app.use('/transactions',auth,transactionRouter);
 
