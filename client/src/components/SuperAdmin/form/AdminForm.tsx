@@ -5,9 +5,11 @@ import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } 
 import { IOrganization } from '../../../types/dataTypes';
 import { getToken } from '../../../helpers/utilityFns';
 import axios from 'axios';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 import { ErrorState } from '../../../types/errorTypes';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
+import { useFetch } from '../../../helpers/useFetch';
+import Loading from '../../Common/Loading';
 
 const initialformState ={
   name:{
@@ -33,28 +35,16 @@ const initialformState ={
 }
 
 function AdminForm() {
-    const [organizations,setOrganizations] = useState<IOrganization[] | null>(null);
+  
     const [formState,setFormState] = useState<ErrorState>(initialformState);
-    useEffect(()=>{
-        async function getData() {
-            const {data} = await axios.get(env.SERVER +'/organization',{
-                headers:{
-                    'Authorization':getToken(),
-                }
-            })
-            setOrganizations(data.data.organizations)
-            console.log(data.data);
-            
-        }
-        try {
-            getData();
-        } catch (error) {
-            console.log(error);
-            
-        }
-    },[])
-
-
+    const [fetchData,error,loading] = useFetch('/organization');
+    let organizations:IOrganization[];
+    if(error){
+      return <p>Error while loading page...</p>
+    }
+    else{
+      organizations = fetchData as IOrganization[];
+    }
    
     
       function handleFormChange(event:React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>){
@@ -83,7 +73,7 @@ function AdminForm() {
           const body = Object.fromEntries(formData.entries());
           console.log(body);
           
-          const {data} = await axios.post(env.SERVER+'/admin/register',body,{
+          const {data} = await axios.post(constant.SERVER+'/admin/register',body,{
             headers: {
               'Content-Type': 'application/json',
               'Authorization':getToken()
@@ -97,6 +87,10 @@ function AdminForm() {
           setFormState(populateFormState(formState));
           alert('failed')
         }
+      }
+
+      if(loading){
+        return <Loading/>
       }
   return (
     <div className={classes.container}>

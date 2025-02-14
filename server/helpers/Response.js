@@ -1,8 +1,9 @@
 class ApiUserResponse{
-    constructor(status,data,token){
+    constructor(status,data,token,success){
         this.status=status;
         this.data = data;
         this.token = token;
+        this.success=success;
     }
 }
 

@@ -7,7 +7,7 @@ const db = new Client();
 
 async function organizationSchema() {
     await db.query(`CREATE TABLE IF NOT EXISTS organization (
-        id SERIAL PRIMARY KEY,
+        organization_id SERIAL PRIMARY KEY,
         name VARCHAR NOT NULL, 
         description VARCHAR,
         payment_id VARCHAR,
@@ -21,7 +21,7 @@ async function organizationSchema() {
 
 async function superAdminSchema() {
     await db.query(`CREATE TABLE IF NOT EXISTS super_admin (
-        id SERIAL PRIMARY KEY,
+        super_id SERIAL PRIMARY KEY,
         name VARCHAR NOT NULL, 
         email VARCHAR UNIQUE NOT NULL,
         password VARCHAR NOT NULL,
@@ -34,7 +34,7 @@ async function superAdminSchema() {
 
 async function adminSchema() {
     await db.query(`CREATE TABLE IF NOT EXISTS admin (
-        id SERIAL PRIMARY KEY,
+        admin_id SERIAL PRIMARY KEY,
         name VARCHAR NOT NULL, 
         email VARCHAR UNIQUE NOT NULL,
         password VARCHAR NOT NULL,
@@ -42,7 +42,7 @@ async function adminSchema() {
         status BOOLEAN DEFAULT true,
         organization_id INTEGER,
         created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(organization_id) REFERENCES organization(id) ON DELETE CASCADE
+        FOREIGN KEY(organization_id) REFERENCES organization(organization_id) ON DELETE CASCADE
       )`)
     
     
@@ -50,16 +50,17 @@ async function adminSchema() {
 
 async function userSchema() {
     await db.query(`CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
+        user_id SERIAL PRIMARY KEY,
         name VARCHAR NOT NULL, 
         email VARCHAR UNIQUE NOT NULL,
         password VARCHAR NOT NULL,
         number VARCHAR,
         status BOOLEAN DEFAULT true,
+        amount INTEGER DEFAULT 0,
         interest INTEGER,
         organization_id INTEGER,
         created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(organization_id) REFERENCES organization(id) ON DELETE CASCADE
+        FOREIGN KEY(organization_id) REFERENCES organization(organization_id) ON DELETE CASCADE
       )`)
     
     
@@ -67,16 +68,31 @@ async function userSchema() {
 
 async function transactionSchema() {
     await db.query(`CREATE TABLE IF NOT EXISTS transactions (
-        id SERIAL PRIMARY KEY,
-        transaction_id uuid default gen_random_uuid(),
+        transaction_id uuid default gen_random_uuid() PRIMARY KEY,
         amount INTEGER,
         image_url VARCHAR,
         approved BOOLEAN DEFAULT NULL,
         organization_id INTEGER,
         user_id INTEGER,
         created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY(organization_id) REFERENCES organization(id) ON DELETE CASCADE
+        FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY(organization_id) REFERENCES organization(organization_id) ON DELETE CASCADE
+      )`)
+    
+}
+
+async function withDrawalSchema() {
+    await db.query(`CREATE TABLE IF NOT EXISTS withdrawals (
+        withdrawal_id uuid default gen_random_uuid() PRIMARY KEY,
+        amount INTEGER,
+        remark VARCHAR DEFAULT '',
+        approved BOOLEAN DEFAULT NULL,
+        organization_id INTEGER,
+        user_id INTEGER,
+        date VARCHAR DEFAULT CURRENT_TIMESTAMP,
+        created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY(organization_id) REFERENCES organization(organization_id) ON DELETE CASCADE
       )`)
     
 }
@@ -87,6 +103,7 @@ async function setupDb(){
     await adminSchema();
     await userSchema();
     await transactionSchema();
+    await withDrawalSchema();
 }
 
 async function connectDb() {

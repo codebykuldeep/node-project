@@ -4,36 +4,28 @@ import { IUser } from '../../../../types/dataTypes';
 import axios from 'axios';
 import { getToken } from '../../../../helpers/utilityFns';
 import classes from './user.module.css'
-import { env } from '../../../../helpers/constants';
+import { constant } from '../../../../helpers/constants';
 import { Button } from '@mui/material';
 import ActionButton from './ActionButtons';
+import { useFetch } from '../../../../helpers/useFetch';
 
 
 function UserDetail() {
     const {id} = useParams();
-    
-    const [data,setData] = useState<IUser | null>(null);
-    useEffect(()=>{
-        async function getData() {
-            const {data} = await axios.get(env.SERVER +'/user/detail/'+id,{
-                headers:{
-                    'Authorization':getToken(),
-                }
-            })
-            setData(data.data.user);
-            
-        }
-        try {
-            getData();
-        } catch (error) {
-            console.log(error);
-            
-        }
-    },[id])
 
-    console.log(data?.id);
+    const [fetchedData,loading,error] = useFetch<IUser>('/user/detail/'+id)
     
-    if(!data){
+    
+    let data: IUser;
+      if (!error) {
+        data = fetchedData as IUser;
+      } else {
+        return <p>Error while loading page</p>;
+      }
+    console.log(data);
+    
+    
+    if(loading){
         return <p>Loading....</p>;
     }
   return (
@@ -42,7 +34,7 @@ function UserDetail() {
             data && (
                 <div className={classes.container}>
                 <div className={classes.heading}>
-                    <h1>Admin Details</h1>
+                    <h1>User Details</h1>
                 </div>
                 <div className={classes.detail}>
                     <div><span>Name :</span><p>{data.name}</p></div>

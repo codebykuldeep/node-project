@@ -4,7 +4,7 @@ import classes from './organization.module.css'
 import { IUser } from '../../types/dataTypes';
 import axios from 'axios';
 import { getToken } from '../../helpers/utilityFns';
-import { env } from '../../helpers/constants';
+import { constant } from '../../helpers/constants';
 import { Column, RadioDataTypeForTable } from '../../types/uiTypes';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
@@ -30,7 +30,7 @@ function Admins() {
   const [rows,setRows] = useState<IUser[] | null>(null);
   useEffect(()=>{
         async function getData() {
-            const {data} = await axios.get(env.SERVER +'/user/admin',{
+            const {data} = await axios.get(constant.SERVER +'/user/admin',{
                 headers:{
                     'Authorization':getToken(),
                 }

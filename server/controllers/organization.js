@@ -7,16 +7,16 @@ export async function handleGetAllOrganization(req,res) {
     try {
         const data = await getAllOrganization();
 
-        return res.json(new actionResponse(200,{organizations:data},true))
+        return res.json(new actionResponse(200,data,true))
     } catch (error) {
-        return res.json(new actionResponse(500,{error},false))
+        return res.json(new actionResponse(500,error,false))
     }
 
 }
 
 export async function handleNewRegister(req,res) {
     if(!req.file){
-        return res.json(new actionResponse(500,{error},false));
+        return res.json(new actionResponse(500,error,false));
     }
     
     const {name,description,payment_id} = req.body;
@@ -26,10 +26,10 @@ export async function handleNewRegister(req,res) {
     try {
         const payment_url = await uploadImage(req.file.path);
         const data = await addOrganization(name,description,payment_id,payment_url);
-        return res.json(new actionResponse(200,{organization:data},true));
+        return res.json(new actionResponse(200,data,true));
 
     } catch (error) {
-        return res.json(new actionResponse(500,{error},false))
+        return res.json(new actionResponse(500,error,false))
     }
 }
 
@@ -39,9 +39,9 @@ export async function handleGetOrganization(req,res) {
     try {
         const data = await getOrganization(id);
         
-        return res.json(new actionResponse(200,{organization:data},true));
+        return res.json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,{error},false))
+        return res.json(new actionResponse(200,error,false))
     }
     
 }
@@ -55,14 +55,14 @@ export async function handleOrganizationStatus(req,res) {
         const data = await switchOrganizationStatus(id,status);
         return res.json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,{error},false))
+        return res.json(new actionResponse(200,error,false))
     }
 }
 
 
 export async function handleOrgUpdate(req,res) {
     if(!req.file){
-        return res.json(new actionResponse(500,{error},false));
+        return res.json(new actionResponse(500,error,false));
     }
     
     const {id,name,description,payment_id} = req.body;
@@ -77,6 +77,6 @@ export async function handleOrgUpdate(req,res) {
     } catch (error) {
         console.log(error);
         
-        return res.json(new actionResponse(500,{error},false))
+        return res.json(new actionResponse(500,error,false))
     }
 }

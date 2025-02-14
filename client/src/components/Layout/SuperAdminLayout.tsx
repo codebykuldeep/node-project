@@ -4,12 +4,19 @@ import SideBar from '../Common/SideBar'
 import NavBar from '../Common/NavBar';
 import { ISidebarProps } from '../../types/uiTypes';
 import SearchBar from '../SuperAdmin/UI/SearchBar';
-
+import { Box } from '@mui/material';
+import Sidebar from '../Common/UI/SideBar';
+import classes from './layout.module.css'
 
 const SideBarProps:ISidebarProps =[
   {
     heading:'Home',
     items:[
+      {
+        text:'Home',
+        icon:'icon',
+        link:''
+      },
       {
         text:'Organization',
         icon:'icon',
@@ -49,12 +56,12 @@ function SuperAdminLayout() {
   
   return (
     <>
-    <SideBar sidebar={SideBarProps}>
-        <>
-        <NavBar><SearchBar/></NavBar>
+     <Box className={classes.container} >
+    <Sidebar list={SideBarProps}/>
+      <Box className={classes.content}>
         <Outlet/>
-        </>
-    </SideBar>    
+      </Box>
+    </Box>
     </>
   )
 }

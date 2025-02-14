@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
-import Login from './components/Common/Login';
+import Login from './components/Common/AuthPage/Login';
 import UserLayout from './components/Layout/UserLayout';
 import RootLayout from './components/Layout/RootLayout';
 import AdminLayout from './components/Layout/AdminLayout';
@@ -26,6 +26,8 @@ import WithdrawPage from './components/User/Transactions/WithdrawPage';
 import OrganizationDetail from './components/SuperAdmin/DetailPage/Organization/OrganizationDetail';
 import AdminDetail from './components/SuperAdmin/DetailPage/Admin/AdminDetail';
 import UserDetail from './components/SuperAdmin/DetailPage/UserPage/UserDetail';
+import CalenderSection from './components/User/Calender/CalendarSection';
+import Withdrawals from './components/Admin/Transactions/Withdrawals';
 
 
 const router = createBrowserRouter([
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
           {
             path:'',
             element:<div>HEllo</div>
+          },
+          {
+            path:'calendar',
+            element:<CalenderSection/>
           },
           {
             path:'transactions',
@@ -108,6 +114,10 @@ const router = createBrowserRouter([
           {
             path:'pending',
             element:<PendingTransactions/>
+          },
+          {
+            path:'withdrawals',
+            element:<Withdrawals/>
           },
           {
             path:'account',

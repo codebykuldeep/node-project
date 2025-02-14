@@ -3,30 +3,28 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { IOrganization } from '../../types/dataTypes';
 import { getToken } from '../../helpers/utilityFns';
-import { env } from '../../helpers/constants';
+import { constant } from '../../helpers/constants';
 import classes from './organization-page.module.css'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { getOrganizationData } from '../../utils/fetchMethods';
+import { useFetch } from '../../helpers/useFetch';
 
 function OrganizationPage() {
    const user = useSelector((state:RootState)=>state.userState.user)
-
-    const [data,setData] = useState<IOrganization | null>(null);
-    console.log(data);
+    const [fetchedData,loading,error] = useFetch<IOrganization>('/organization/'+ user!.organization_id)
     
-    useEffect(()=>{
-        try {
-            getOrganizationData(user!.organization_id)
-            .then(data=>setData(data));
-        } catch (error) {
-            console.log(error);
-            
-        }
-    },[user])
+    let data:IOrganization;
+    if(!error){
+        data = fetchedData as IOrganization;
+    }
+    else{
+        return <p>Error while loading page</p>
+    }
+
   return (
     <div>
-        {!data && <p>Loading....</p>}
+        {loading && <p>Loading....</p>}
         {
             data && (
                 <div>

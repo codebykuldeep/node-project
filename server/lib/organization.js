@@ -39,6 +39,6 @@ export async function updateOrganization(id,name,description,payment_id,payment_
 
 
 export async function searchOrganizations(query) {
-    const res = await db.query('SELECT * FROM organization WHERE name LIKE %$1% OR description LIKE %$2% ;',[query,query])
+    const res = await db.query('SELECT * FROM organization WHERE name LIKE $1 ;',['%'+query+'%'])
     return res.rows;
 }

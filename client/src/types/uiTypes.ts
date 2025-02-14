@@ -23,3 +23,5 @@ export interface Column {
 
 
 export type RadioDataTypeForTable = 'all' | 'disabled' | 'active';
+
+export type TransactionTypeForTable = 'all' |  'pending' | 'approved' | 'rejected';

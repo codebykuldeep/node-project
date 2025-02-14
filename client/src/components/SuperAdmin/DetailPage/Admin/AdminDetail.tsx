@@ -4,38 +4,26 @@ import { IUser } from '../../../../types/dataTypes';
 import axios from 'axios';
 import { getToken } from '../../../../helpers/utilityFns';
 import classes from './admin.module.css'
-import { env } from '../../../../helpers/constants';
+import { constant } from '../../../../helpers/constants';
 import { Button } from '@mui/material';
 import ActionButton from './ActionButtons';
+import { useFetch } from '../../../../helpers/useFetch';
 
 
 function AdminDetail() {
     const {id} = useParams();
-    
-    const [data,setData] = useState<IUser | null>(null);
-    useEffect(()=>{
-        async function getData() {
-            const {data} = await axios.get(env.SERVER +'/user/admin/'+id,{
-                headers:{
-                    'Authorization':getToken(),
-                }
-            })
-            console.log(data.data);
-            
-            setData(data.data.admin);
-            
-        }
-        try {
-            getData();
-        } catch (error) {
-            console.log(error);
-            
-        }
-    },[])
+    const [fetchedData, loading, error] = useFetch<IUser>(
+      '/user/admin/'+id
+    );
 
-    console.log(data?.id);
-    
-    if(!data){
+    let data: IUser;
+    if (!error) {
+      data = fetchedData as IUser;
+    } else {
+      return <p>Error while loading page</p>;
+    }
+
+    if(loading){
         return <p>Loading....</p>;
     }
   return (

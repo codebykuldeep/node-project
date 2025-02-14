@@ -3,6 +3,34 @@ import SideBar from '../Common/SideBar'
 import { Outlet } from 'react-router-dom'
 import NavBar from '../Common/NavBar';
 import { ISidebarProps } from '../../types/uiTypes';
+import { Box } from '@mui/material';
+import classes from './layout.module.css'
+import Sidebar from '../Common/UI/SideBar';
+
+
+
+function UserLayout() {
+    //const location =useLocation();
+    
+  return (
+    <>
+    {/* <SideBar sidebar={SideBarProps}>
+        <>
+        <NavBar/>
+        <Outlet/>
+        </>
+    </SideBar>  */}
+    <Box className={classes.container} >
+    <Sidebar list={SideBarProps}/>
+      <Box className={classes.content}>
+        <Outlet/>
+      </Box>
+    </Box>   
+    </>
+  )
+}
+
+export default UserLayout
 
 
 const SideBarProps:ISidebarProps =[
@@ -17,7 +45,7 @@ const SideBarProps:ISidebarProps =[
       {
         text:'Calender',
         icon:'icon',
-        link:''
+        link:'calendar'
       },
     ],
   },
@@ -57,21 +85,3 @@ const SideBarProps:ISidebarProps =[
     ],
   }
 ]
-
-
-function UserLayout() {
-    //const location =useLocation();
-    
-  return (
-    <>
-    <SideBar sidebar={SideBarProps}>
-        <>
-        <NavBar/>
-        <Outlet/>
-        </>
-    </SideBar>    
-    </>
-  )
-}
-
-export default UserLayout

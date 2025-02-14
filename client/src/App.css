@@ -1,3 +1,16 @@
 body{
     background-color: #f9f9fc;
 }
+
+:root{
+    --bg-color:#f2fafa;
+    --main-text:#0d5152;
+    --sec-text:#898d96;
+    --main-btn:#f27457;
+}
+
+.main-btn button{
+    border-radius: 20px;
+    background: var(--main-btn);
+    padding: 10px 20px;
+}

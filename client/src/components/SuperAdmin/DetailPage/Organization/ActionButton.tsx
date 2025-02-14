@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import classes from "./organization.module.css";
-import { env } from "../../../../helpers/constants";
+import { constant } from "../../../../helpers/constants";
 import { IOrganization } from "../../../../types/dataTypes";
 import axios from "axios";
 import { getToken } from "../../../../helpers/utilityFns";
@@ -20,7 +20,7 @@ function ActionButton({organization,triggerUpdate}:ActionButtonProps) {
       console.log(status);
       
         try {
-          const {data}  = await axios.get(env.SERVER +'/organization/status',{
+          const {data}  = await axios.get(constant.SERVER +'/organization/status',{
             headers:{
               'Authorization':getToken(),
             },

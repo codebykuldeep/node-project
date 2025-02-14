@@ -26,3 +26,18 @@ export interface ITransaction{
     user_id:string;
     [index:string]:string;
 }
+
+
+export interface IEvent{
+    start: string,
+    end: string,
+    display: string,
+    backgroundColor:string
+}
+
+
+export interface SerachResultResponse{
+    organizations:IOrganization[],
+    users:IUser[],
+    admins:IUser[]
+}

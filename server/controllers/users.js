@@ -27,9 +27,7 @@ async function getUser(req,res) {
         
         return res.status(200).json(
             new ApiUserResponse(200
-                ,{
-                    user
-                },
+                ,user,
                 token
             )
         )
@@ -62,7 +60,7 @@ export async function handleGetAllAdmins(req,res) {
         const data = await getAllAdmin();
         return res.json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,{error},false))
+        return res.json(new actionResponse(500,error,false))
     }
 }
 
@@ -72,7 +70,7 @@ export async function handleGetAllUsers(req,res) {
         const data = await getAllUsers();
         return res.json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(500,{error},false))
+        return res.json(new actionResponse(500,error,false))
     }
 }
 
@@ -85,7 +83,7 @@ export async function handleGetUserByOrg(req,res) {
         const data = await getUserByOrganization(id);
         return res.json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,{error},false))
+        return res.json(new actionResponse(200,error,false))
     }
 }
 
@@ -99,9 +97,9 @@ export async function handleGetAdmin(req,res) {
         if(!data){
             return res.json(new actionResponse(404,undefined,false));
         }
-        return res.json(new actionResponse(200,{admin:data},true));
+        return res.json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,{error},false))
+        return res.json(new actionResponse(200,error,false))
     }
 }
 
@@ -120,16 +118,22 @@ export async function handleUserStatus(req,res) {
 
 export async function handleGetUserDetails(req,res) {
     const {id} = req.params;
+    console.log('Here');
+    
     try {
         const user  = await getSpecificUser(id);
         if(user){
             console.log(user);
             
-            return res.json(new actionResponse(200,{user},true)); 
+            return res.json(new actionResponse(200,user,true)); 
         }
-        return res.json(new actionResponse(200,undefined,true));
+        else{
+            return res.json(new actionResponse(200,undefined,true))
+        };
     } catch (error) {
-        return res.json(new actionResponse(500,error,true));
+        console.log(error);
+        
+        return res.json(new actionResponse(500,error,false));
     }
 }
 

@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import DataTable from '../Common/DataTable';
 import classes from './organization.module.css'
 import axios from 'axios';
-import { env } from '../../helpers/constants';
+import { constant } from '../../helpers/constants';
 import { getToken } from '../../helpers/utilityFns';
 import { Column, RadioDataTypeForTable } from '../../types/uiTypes';
 import { IOrganization } from '../../types/dataTypes';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import SelectTypeRadio from '../Common/SelectTypeRadio';
+import { ColumnType } from '../../types/listTypes';
+import ShowTable from '../Common/ShowTable';
 
 const columns: readonly Column[] = [
     { id: 'name', label: 'Name', minWidth: 170,},
@@ -26,23 +28,24 @@ const columns: readonly Column[] = [
 function Organizations() {
     const [data,setData] = useState<IOrganization[] | null>(null);
     const [rows,setRows] = useState<IOrganization[] | null>(null);
+    const [error,setError] =useState<boolean>(false);
 
     useEffect(()=>{
         async function getData() {
-            const {data} = await axios.get(env.SERVER +'/organization',{
+            setError(false);
+           try {
+            const {data} = await axios.get(constant.SERVER +'/organization',{
                 headers:{
                     'Authorization':getToken(),
                 }
             })
-            setData(data.data.organizations)
-            setRows(data.data.organizations);
+            setData(data.data)
+            setRows(data.data);
+           } catch (error) {
+            setError(true);
+           }
         }
-        try {
-            getData();
-        } catch (error) {
-            console.log(error);
-            
-        }
+        getData()
     },[])
 
     function handleDataType(action:RadioDataTypeForTable){
@@ -58,21 +61,55 @@ function Organizations() {
         setRows(newRows);
         
     }
+
+
+    if(error){
+        return <p>Error Loading page</p>
+    }
   return (
     <div className={classes.container}>
         <div className={classes.heading}>
             <h2>Organisations</h2>
-            <Link to={'add'}><Button variant='contained'>Add</Button></Link>
+            <Link to={'add'} className='main-btn'><Button variant='contained'>Add</Button></Link>
         </div>
         <div>
             <SelectTypeRadio onChange={handleDataType}/>
         </div>
-        {data && rows && <DataTable columns={columns} rows={rows}/>}
+        {data && rows && <ShowTable<IOrganization> columns={OrganizationColumn}  rows={rows}/>}
     </div>
   )
 }
 
-export default Organizations
+export default Organizations;
+
+
+
+export const OrganizationColumn:ColumnType[] = [
+    {
+      id:'organization_id',
+      label:'Org ID'
+    },
+    {
+      id:'name',
+      label:'Name',
+  
+    },
+    {
+      id:'description',
+      label:'Description',
+      
+    },
+    {
+      id:'status',
+      label:'Status',
+      format:(value)=>{
+        if(Boolean(value) === false){
+          return 'inactive'
+        }
+        return 'active';
+      }
+    },
+]
 
 
   

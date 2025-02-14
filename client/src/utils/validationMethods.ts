@@ -62,6 +62,12 @@ export function validation(title:string,value:string):[string,boolean]{
         }
         return ['',false];
     }
+    if(title === 'amount'){
+        if(!value || Number(value) < 0){
+            return [`Please enter valid amount`,true];
+        }
+        return ['',false];
+    }
     
     return fieldValidation(value);
 }

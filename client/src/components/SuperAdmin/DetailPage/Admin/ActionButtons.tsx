@@ -4,7 +4,7 @@ import classes from "./admin.module.css";
 import { getToken } from "../../../../helpers/utilityFns";
 import axios from "axios";
 import { IUser } from "../../../../types/dataTypes";
-import { env } from "../../../../helpers/constants";
+import { constant } from "../../../../helpers/constants";
 
 interface ActionButtonProps{
     data:IUser;
@@ -16,7 +16,7 @@ function ActionButton({data}:ActionButtonProps) {
 
     async function handleAction(status:boolean) {
       try {
-        const {data:res}  = await axios.get(env.SERVER +'/user/status',{
+        const {data:res}  = await axios.get(constant.SERVER +'/user/status',{
           headers:{
             'Authorization':getToken(),
           },

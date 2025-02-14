@@ -4,7 +4,7 @@ import classes from './form.module.css';
 import { Button, InputLabel } from '@mui/material';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
 import { ErrorState } from '../../../types/errorTypes';
-import { env } from '../../../helpers/constants';
+import { constant } from '../../../helpers/constants';
 import { getToken } from '../../../helpers/utilityFns';
 import axios from 'axios';
 
@@ -59,7 +59,7 @@ function OrganizationForm() {
       
       const formData = new FormData(event.target as HTMLFormElement );
       const body = Object.fromEntries(formData.entries());
-      const {data} = await axios.post(env.SERVER+'/organization/register',body,{
+      const {data} = await axios.post(constant.SERVER+'/organization/register',body,{
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization':getToken()

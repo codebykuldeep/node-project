@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import DataTable from '../Common/DataTable';
 import { IUser } from '../../types/dataTypes';
-import { env } from '../../helpers/constants';
+import { constant } from '../../helpers/constants';
 import axios from 'axios';
 import { getToken } from '../../helpers/utilityFns';
 import { Column, RadioDataTypeForTable } from '../../types/uiTypes';
@@ -30,9 +30,10 @@ function OrgUsers() {
     const user = useSelector((state:RootState)=>state.userState.user)
     const [data,setData] = useState<IUser[] | null>(null);
     const [rows,setRows] = useState<IUser[] | null>(null);
+    
   useEffect(()=>{
     async function getData() {
-        const {data} = await axios.get(env.SERVER +'/user/org/'+user!.organization_id,{
+        const {data} = await axios.get(constant.SERVER +'/user/org/'+user!.organization_id,{
             headers:{
                 'Authorization':getToken(),
             }
@@ -48,7 +49,8 @@ function OrgUsers() {
         console.log(error);
         
     }
-  },[])
+  },[user])
+  
   function handleDataType(action:RadioDataTypeForTable){
             let newRows = data;
             if(data && action === 'disabled'){
