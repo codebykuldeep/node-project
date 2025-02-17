@@ -6,6 +6,10 @@ import { handleAdminRegister, handleSearch } from '../controllers/admin.js';
 
 const router  = express.Router();
 
+router.get('/',auth,superAdminAuth,handleGetAllAdmins)
+
+router.get('/:id',auth,superAdminAuth,handleGetAdmin);
+
 router.get('/search',adminAuth,handleSearch)
 
 router.post('/register',superAdminAuth,handleAdminRegister)

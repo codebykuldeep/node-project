@@ -15,9 +15,11 @@ export async function handleAdminRegister(req,res){
         const hashPassword = '123456';
         const addUserData = await addAdmin(name,email,hashPassword,number,organization_id);
         delete addUserData.password;
-        return res.json(new actionResponse(200,data,true));
+        return res.json(new actionResponse(200,addUserData,true));
    } catch (error) {
-        return res.json(new actionResponse(500,error,false))
+          console.log(error);
+     
+        return res.status(500).json(new actionResponse(500,error,false))
    }
     
 }

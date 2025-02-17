@@ -1,8 +1,6 @@
-import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from "axios";
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom"
 import { getToken, removeToken } from "../../helpers/utilityFns";
-import { constant } from "../../helpers/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { userActions } from "../../store/userState";
@@ -18,6 +16,7 @@ function DashBoardLayout() {
     async function getUser() {
       try {
         const data = await apiCall('GET','verify')
+       
         if(data.success){
           dispatch(userActions.setUser({user:data.data}))
         }

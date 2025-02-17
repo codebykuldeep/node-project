@@ -1,90 +1,72 @@
 import { useEffect, useState } from 'react';
-import DataTable from '../UI/DataTable';
 import { ITransaction } from '../../../types/dataTypes';
-import { constant } from '../../../helpers/constants';
-import axios from 'axios';
-import { getToken } from '../../../helpers/utilityFns';
-import { Column, TransactionTypeForTable } from '../../../types/uiTypes';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import {  TransactionTypeForTable } from '../../../types/uiTypes';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import classes from '../org-user.module.css'
 import WithdrawalDetail from './WithdrawalDetail';
 import TransactionRadioBtn from '../../Common/TransactionRadioBtn';
+import { apiCall } from '../../../utils/httpMethod';
+import { useQuery } from '@tanstack/react-query';
+import ShowTable from '../../Common/ShowTable';
+import { ColumnType } from '../../../types/listTypes';
 
-const columns: readonly Column[] = [
-    { id: 'user_id', label: 'User ID', minWidth: 150,},
-    { id: 'amount', label: 'Amount', minWidth: 150 },
-    {
-        id: 'approved',
-        label: 'Status',
-        minWidth: 170,
-        align: 'center',
-    },
-    { id: 'created_at', label: 'Payment Date', minWidth: 150 },
-  ];
 
 function Withdrawals({id}:{id?:string}) {
     const user = useSelector((state:RootState)=>state.userState.user)
-  const [data,setData] = useState<ITransaction[] | null>(null);
-  const [rows,setRows] = useState<ITransaction[] | null>(null);
-  const [modalData,setModalData] = useState<ITransaction | null>(null)
-    const [update,setUpdate] = useState(1);
-  const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = (transaction:ITransaction) =>{
-        setModalData(transaction)
-      
-        setOpen(true);
-    };
-    const handleClose = () => setOpen(false);
+    const [modalData,setModalData] = useState<ITransaction | null>(null)
+    const [rows,setRows] = useState<ITransaction[]>([])
+    const {data,isFetching,isError,refetch} = useQuery({
+      queryKey:[],
+      queryFn:()=>apiCall('GET','withdrawals/org/'+user!.organization_id)
+    })
+    const [open, setOpen] = useState<boolean>(false)
 
-    function updataData(){
-        setUpdate(prev=>prev+1);
+    useEffect(()=>{
+        if(data && data.data.length > 0){
+            setRows(data.data)
+        }
+
+    },[data])
+  
+      const handleOpen = (transaction:ITransaction) =>{
+          setModalData(transaction)
+        
+          setOpen(true);
+      };
+      const handleClose = () => setOpen(false);
+  
+    if(isFetching){
+      return <p>Loading....</p>
     }
   
-  const org_id = id || user!.organization_id;
+    if(isError){
+      return <p>Error while loading page</p>
+    }
+   
 
-  useEffect(()=>{
-    async function getData() {
-        const {data} = await axios.get(constant.SERVER +'/withdrawals/org/'+org_id,{
-            headers:{
-                'Authorization':getToken(),
-            },
-        })
-        console.log(data);
+    function handleRadioBtn(action:TransactionTypeForTable){
+        const oldRows:ITransaction[] = data.data;
+        let newRows = data;
+        if(oldRows.length === 0)
+            return;
         
-        setData(data.data)
-        setRows(data.data);
-    }
-    try {
-        getData();
-    } catch (error) {
-        console.log(error);
+        if(oldRows && action === 'pending'){
+            
+            newRows = oldRows.filter((entry)=>(entry.approved === null) )
+            
+        }
+        else if(oldRows && action === 'approved'){
+            newRows = oldRows.filter((entry)=>Boolean(entry.approved) === true)
+        }
+        else if(oldRows && action === 'rejected'){
+            newRows = oldRows.filter((entry)=>( entry.approved !== null && Boolean(entry.approved) === false))
+        }
         
-    }
-  },[user,update,org_id])
-
-
-  function handleRadioBtn(action:TransactionTypeForTable){
-    let newRows = data;
-    console.log(data![1].approved)
-    
-    if(data && action === 'pending'){
-        
-        newRows = data.filter((entry)=>(entry.approved === null) )
+        setRows(newRows);
         
     }
-    else if(data && action === 'approved'){
-        newRows = data.filter((entry)=>Boolean(entry.approved) === true)
-    }
-    else if(data && action === 'rejected'){
-        newRows = data.filter((entry)=>( entry.approved !== null && Boolean(entry.approved) === false))
-    }
-    
-    setRows(newRows);
-    
-}
+  
   return (
     <div  className={classes.container}>
         <div className={classes.heading}>
@@ -93,11 +75,44 @@ function Withdrawals({id}:{id?:string}) {
         <div>
             <TransactionRadioBtn onChange={handleRadioBtn}/>
         </div>
-        {data && <WithdrawalDetail open={open} handleClose={handleClose} data={modalData!} updateData={updataData}/>}
-        {rows && rows.length> 0 && <DataTable columns={columns} rows={rows} handleOpen={handleOpen}/>}
-        {rows && rows.length === 0 && <p>No transactions</p>}
+        {data && modalData && <WithdrawalDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
+        {data && rows.length> 0 && <ShowTable<ITransaction> columns={columns} rows={rows} openModal={handleOpen} />}
+        {data && rows.length === 0 && <p>No Withdrawals transactions</p>}
     </div>
   )
 }
 
 export default Withdrawals;
+
+
+
+const columns: ColumnType[] = [
+  { id: "user_id", label: "User ID" },
+  { id: "paid_amount", label: "Amount"},
+  {
+    id: "payment_type",
+    label: "Payment Type",
+    align:'center',
+    format:(value)=>{
+      if(Boolean(value) === false)
+        return 'debit';
+
+      return 'credit';
+    }
+  },
+  {
+    id: "approved",
+    label: "Status",
+    format:(value)=>{
+      if(value === null)
+        return 'pending';
+      if(Boolean(value) === false)
+        return 'rejected';
+
+      return 'accepted';
+    }
+  },
+  { id: "created_at", label: "Payment Date" },
+];
+
+

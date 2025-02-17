@@ -109,9 +109,9 @@ export async function handleUserStatus(req,res) {
 
     try {
         const data = await switchUserStatus(id,status,role)
-        return res.json(new actionResponse(200,data,true)); 
+        return res.status(200).json(new actionResponse(200,data,true)); 
     } catch (error) {
-        return res.json(new actionResponse(500,undefined,false));
+        return res.status(500).json(new actionResponse(500,undefined,false));
     }
 }
 
@@ -128,7 +128,7 @@ export async function handleGetUserDetails(req,res) {
             return res.json(new actionResponse(200,user,true)); 
         }
         else{
-            return res.json(new actionResponse(200,undefined,true))
+            return res.status(400).json(new actionResponse(400,undefined,true))
         };
     } catch (error) {
         console.log(error);

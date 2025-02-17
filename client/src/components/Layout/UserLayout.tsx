@@ -1,12 +1,18 @@
 import React from 'react'
-import SideBar from '../Common/SideBar'
 import { Outlet } from 'react-router-dom'
-import NavBar from '../Common/NavBar';
 import { ISidebarProps } from '../../types/uiTypes';
 import { Box } from '@mui/material';
 import classes from './layout.module.css'
 import Sidebar from '../Common/UI/SideBar';
 
+
+//ICONS
+import HomeIcon from '@mui/icons-material/Home';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import AccountIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 
 function UserLayout() {
@@ -14,12 +20,6 @@ function UserLayout() {
     
   return (
     <>
-    {/* <SideBar sidebar={SideBarProps}>
-        <>
-        <NavBar/>
-        <Outlet/>
-        </>
-    </SideBar>  */}
     <Box className={classes.container} >
     <Sidebar list={SideBarProps}/>
       <Box className={classes.content}>
@@ -35,16 +35,16 @@ export default UserLayout
 
 const SideBarProps:ISidebarProps =[
   {
-    heading:'Home',
+    heading:'Dashboard',
     items:[
       {
-        text:'Dashboard',
-        icon:'icon',
+        text:'Home',
+        icon:<HomeIcon/>,
         link:''
       },
       {
         text:'Calender',
-        icon:'icon',
+        icon:<CalendarMonthIcon/>,
         link:'calendar'
       },
     ],
@@ -54,17 +54,17 @@ const SideBarProps:ISidebarProps =[
     items:[
       {
         text:'Payment List',
-        icon:'icon',
+        icon:<ReceiptLongIcon/>,
         link:'transactions'
       },
       {
         text:'Withdrawal List',
-        icon:'icon',
+        icon:<ReceiptLongIcon/>,
         link:'withdrawal'
       },
       {
         text:'Withdraw',
-        icon:'icon',
+        icon:<IosShareIcon/>,
         link:'withdraw'
       },
     ],
@@ -74,12 +74,12 @@ const SideBarProps:ISidebarProps =[
     items:[
       {
         text:'Profile',
-        icon:'icon',
+        icon:<AccountIcon/>,
         link:'account'
       },
       {
         text:'Logout',
-        icon:'icon',
+        icon:<LogoutIcon/>,
         link:'logout'
       }
     ],

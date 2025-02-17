@@ -74,6 +74,9 @@ async function transactionSchema() {
         approved BOOLEAN DEFAULT NULL,
         organization_id INTEGER,
         user_id INTEGER,
+        payment_type BOOLEAN DEFAULT true NOT NULL,
+        remark VARCHAR DEFAULT '',
+        date VARCHAR DEFAULT CURRENT_TIMESTAMP,
         created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
         FOREIGN KEY(organization_id) REFERENCES organization(organization_id) ON DELETE CASCADE

@@ -1,27 +1,43 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import SideBar from '../Common/SideBar'
-import NavBar from '../Common/NavBar';
 import { ISidebarProps } from '../../types/uiTypes';
+import { Box } from '@mui/material';
+import Sidebar from '../Common/UI/SideBar';
+import classes from './layout.module.css'
 
+//ICONS
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
+import BusinessIcon from '@mui/icons-material/Business';
+import PeopleIcon from '@mui/icons-material/People';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import AccountIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const SideBarProps:ISidebarProps =[
   {
     heading:'Organization',
     items:[
       {
+        text:'Home',
+        icon:<HomeIcon/>,
+        link:''
+      },
+      {
         text:'Details',
-        icon:'icon',
+        icon:<InfoIcon/>,
         link:'organization'
       },
       {
         text:'Update Info',
-        icon:'icon',
+        icon:<BusinessIcon/>,
         link:'update'
       },
       {
         text:'Users',
-        icon:'icon',
+        icon:<PeopleIcon/>,
         link:'users-list'
       },
     ],
@@ -30,18 +46,18 @@ const SideBarProps:ISidebarProps =[
     heading:'Inbox',
     items:[
       {
-        text:'transactions',
-        icon:'icon',
+        text:'Transactions',
+        icon:<ReceiptLongIcon/>,
         link:'transactions'
       },
       {
         text:'Pendings',
-        icon:'icon',
+        icon:<PendingActionsIcon/>,
         link:'pending'
       },
       {
         text:'Withdrawals Req',
-        icon:'icon',
+        icon:<IosShareIcon/>,
         link:'withdrawals'
       }
     ],
@@ -51,12 +67,12 @@ const SideBarProps:ISidebarProps =[
     items:[
       {
         text:'Account',
-        icon:'icon',
+        icon:<AccountIcon/>,
         link:'account'
       },
       {
         text:'Logout',
-        icon:'icon',
+        icon:<LogoutIcon/>,
         link:'logout'
       }
     ],
@@ -66,12 +82,12 @@ const SideBarProps:ISidebarProps =[
 function AdminLayout() {
   return (
     <>
-    <SideBar sidebar={SideBarProps}>
-        <>
-        <NavBar/>
+     <Box className={classes.container} >
+    <Sidebar list={SideBarProps}/>
+      <Box className={classes.content}>
         <Outlet/>
-        </>
-    </SideBar>    
+      </Box>
+    </Box>
     </>
   )
 }

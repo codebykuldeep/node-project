@@ -4,13 +4,13 @@ export async function getAllOrgTransactions(id,pending) {
     let res;
     if(pending){
         res = await db.query(`SELECT * FROM
-            (SELECT * FROM transactions INNER JOIN users ON transactions.user_id = users.id) as t 
-          WHERE T.user_id = $1 AND t.approved is NULL;`,[id]);
+            (SELECT * , users.organization_id as org_id  , transactions.amount AS paid_amount FROM transactions INNER JOIN users ON transactions.user_id = users.user_id) as t 
+           WHERE t.org_id = $1 AND  t.approved IS NULL ;`,[id]);
     }
     else{
         res = await db.query(`SELECT * FROM
-            (SELECT * , users.organization_id as org_id FROM transactions INNER JOIN users ON transactions.user_id = users.id) as t 
-           WHERE org_id = $1 ;`,[id]);
+            (SELECT * , users.organization_id as org_id  , transactions.amount AS paid_amount FROM transactions INNER JOIN users ON transactions.user_id = users.user_id) as t 
+           WHERE t.org_id = $1 ;`,[id]);
     }
      
     return res.rows;
