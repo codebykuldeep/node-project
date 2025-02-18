@@ -1,12 +1,5 @@
-import { useEffect, useState } from 'react';
-import DataTable from '../UI/DataTable';
+import { useState } from 'react';
 import { ITransaction } from '../../../types/dataTypes';
-import { constant } from '../../../helpers/constants';
-import axios from 'axios';
-import { getToken } from '../../../helpers/utilityFns';
-import { Column } from '../../../types/uiTypes';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import classes from './transactions.module.css'
@@ -50,7 +43,7 @@ function UserTransactions() {
             <h2>Transactions</h2>
         </div>
 
-        {data && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
+        {data && modalData && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
         {data && rows.length> 0 && <ShowTable<ITransaction> columns={columns} rows={rows} openModal={handleOpen} />}
         {data && rows.length === 0 && <p>No transactions</p>}
     </div>

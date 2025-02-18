@@ -5,6 +5,7 @@ import { getSuperAdmin } from '../lib/superAdmin.js'
 import bcrypt from "bcrypt"
 import passwordGenerator from 'generate-password';
 import { addUsers, getAdmin, getAllUsers, getSpecificUser, getUserByOrganization, searchForUser, switchUserStatus, updateUser } from '../lib/users.js';
+import { sendSignUPMailForUser } from '../services/mailServices.js';
 
 
 async function getUser(req,res) {
@@ -19,7 +20,11 @@ async function getUser(req,res) {
         const user = await searchForUser(email);
     
         if(!user){
-            return res.status(404).json(new ApiUserResponse(404))
+            return res.status(200).json(new ApiUserResponse(404,{message:'User donot exists'},null,false))
+        }
+        const passwordCheck = bcrypt.compareSync(password,user.password);
+        if(!passwordCheck){
+            return res.status(200).json(new ApiUserResponse(401,{message:'Incorrect credentials'},null,false))
         }
         
         delete user.password;
@@ -28,11 +33,12 @@ async function getUser(req,res) {
         return res.status(200).json(
             new ApiUserResponse(200
                 ,user,
-                token
+                token,
+                true
             )
         )
     } catch (error) {
-        return res.json(new ApiUserResponse(404,{message:error.message}))
+        return res.json(new ApiUserResponse(404,{message:error.message},null,false))
     }
 };
 
@@ -138,15 +144,18 @@ export async function handleGetUserDetails(req,res) {
 }
 
 export async function handleUpdateUser(req,res) {
-    const {name,email,number,role} = req.body;
-    const id = req.user.id;
-
+    const {name,email,number} = req.body;
+    const id = req.user.user_id;
+    const role = req.user.role;
+    
     try {
         
         const data = await updateUser(id,email,name,number,role);
-        return res.json(new actionResponse(500,data,true));
+        return res.status(200).json(new actionResponse(200,{message:'Details updated successfully'},true));
     } catch (error) {
-        return res.json(new actionResponse(500,error,false));
+        console.log(error);
+        
+        return res.status(500).json(new actionResponse(500,{message:'Details updation failed',error},false));
     }
     
 }
@@ -158,10 +167,11 @@ export async function handleCreateUser(req,res){
     const {name ,email ,number ,interest ,organization_id } =req.body; 
     
     try {
-        // const password = passwordGenerator({length:10,number:true});
-        // const hashPassword = await bcrypt.hash(password,3);
-        const hashPassword = '123456';
+        const password = passwordGenerator.generate({length:10,number:true});
+        const hashPassword = await bcrypt.hash(password,3);
+        //const hashPassword = '123456';
         const data = await addUsers(name,email,hashPassword,number,interest,organization_id);
+        sendSignUPMailForUser(email,password);
         return res.json(new actionResponse(200,data,true));
     } catch (error) {
         console.log(error);

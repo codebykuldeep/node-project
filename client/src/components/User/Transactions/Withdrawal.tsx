@@ -1,18 +1,9 @@
-import { useEffect, useState } from 'react';
-import DataTable from '../UI/DataTable';
+import { useState } from 'react';
 import { ITransaction } from '../../../types/dataTypes';
-import { constant } from '../../../helpers/constants';
-import axios from 'axios';
-import { getToken } from '../../../helpers/utilityFns';
-import { Column } from '../../../types/uiTypes';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import classes from './transactions.module.css'
 import TransactionDetail from './TransactionDetail';
-import { useFetch } from '../../../helpers/useFetch';
-import Loading from '../../Common/Loading';
 import ShowTable from '../../Common/ShowTable';
 import { ColumnType } from '../../../types/listTypes';
 import { useQuery } from '@tanstack/react-query';
@@ -24,8 +15,8 @@ function Withdrawal() {
   const [modalData,setModalData] = useState<ITransaction | null>(null)
   const {data,isFetching,isError,refetch} = useQuery({
     queryKey:[],
-    queryFn:()=>apiCall('GET','withdrawals/'+user!.organization_id,{
-      type:'all'
+    queryFn:()=>apiCall('GET','transactions/'+user!.organization_id,{
+      type:'debit'
     })
   })
   const [open, setOpen] = useState<boolean>(false)
@@ -51,7 +42,7 @@ function Withdrawal() {
             <h2>Withdrawals History</h2>
         </div>
 
-        {data && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
+        {data && modalData&&  <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
         {data && rows.length> 0 && <ShowTable<ITransaction> columns={columns} rows={rows} openModal={handleOpen} />}
         {data && rows.length === 0 && <p>No Withdrawal transactions</p>}
     </div>

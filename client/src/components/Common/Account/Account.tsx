@@ -1,12 +1,11 @@
 import React from 'react';
 import classes from './account.module.css';
-import userImage from '../../assets/user-image.jpg'
+import userImage from '../../../assets/user-image.jpg'
 import { useSearchParams } from 'react-router-dom';
-import PersonalDetails from './Account/PersonalDetails';
-import UpdateAccount from './Account/UpdateAccount';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import ResetPassword from './Account/ResetPassword';
+import { RootState } from '../../../store/store';
+import UpdateAccount from './UpdateAccount';
+import ResetPassword from './ResetPassword';
 
 
 function Account() {
@@ -34,15 +33,13 @@ function Account() {
           </div>
         </div>
         <div className={classes.option}>
-          <button value={'details'} onClick={updateView}>Personal Details</button>
-          <button value={'update'} onClick={updateView}>Update Details</button>
-          <button value={'reset'} onClick={updateView}>Reset Password</button>
+          <button value={'details'} onClick={updateView}>Profile</button>
+          <button value={'reset'} onClick={updateView}>Change Password</button>
         </div>
       </div>
       <div className={classes.right}>
         <div>
-          {!view || view === 'details' ? <PersonalDetails user={user!}/> : <></> }
-          {view === 'update' ? <UpdateAccount user={user!}/> : <></> }
+          {!view || view === 'details' ? <UpdateAccount user={user!}/> : <></> }
           {view === 'reset' ? <ResetPassword/> : <></> }
         </div>
       </div>

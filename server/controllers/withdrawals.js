@@ -13,11 +13,14 @@ export async function handlegetUserWithdrawal(req,res){
 
 
 export async function handleWithdrawalReq(req,res) {
-    const {user_id,organization_id,amount} =req.body;
-
+    const {amount} =req.body;
+    
+    const user_id = req.user.user_id;
+    const organization_id = req.user.organization_id
+    
     try {
         const data = await createWithdrawalReq(user_id,organization_id,amount);
-        return res.status(200).json(new actionResponse(200,data,true))
+        return res.status(200).json(new actionResponse(200,{message:'Withdrawal req generated'},true))
     } catch (error) {
         return res.status(500).json(new actionResponse(500,error,false))
     }

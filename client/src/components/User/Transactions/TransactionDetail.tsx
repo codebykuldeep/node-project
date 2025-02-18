@@ -28,8 +28,8 @@ interface TransactionDetailProps{
 export default function TransactionDetail({open,handleClose,data,updateData}:TransactionDetailProps) {
     
     let Buttons:React.ReactNode;
-    let paymentStatus = '';
     
+    const paymentStatus = data.approved === null ? 'pending' : Boolean(data.approved) ? 'Approved':'Rejected' ;
     
 
 
@@ -52,7 +52,7 @@ export default function TransactionDetail({open,handleClose,data,updateData}:Tra
                         <p><span>Amount</span> : {data.amount}</p>
                         <p><span>Payment time</span> : {data.created_at}</p>
                         <p><span>Transaction Id</span> : {data.transaction_id}</p>
-                        <p><span>Current Payment Status</span> : {paymentStatus || (Boolean(data.approved) ? 'Approved':'Rejected' )}</p>
+                        <p><span>Current Payment Status</span> : {paymentStatus}</p>
                         </div>
                     </div>
                     <div className={classes.img}>

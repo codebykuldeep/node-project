@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from '../types/dataTypes';
+import { apiCall } from '../utils/httpMethod';
 
 
 export interface UserState {
@@ -14,6 +15,18 @@ const initialState: UserState  = {
   user:null
 }
 
+export const updateUser = createAsyncThunk('users/updateUser',async ()=>{
+  const response = await apiCall('GET','verify');
+  
+  if(response.success){
+    return response.data;
+  }
+  else{
+    return null;
+  }
+  
+})
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -25,6 +38,13 @@ export const userSlice = createSlice({
     removeState: (state) => {
       state.user = null;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(updateUser.fulfilled,(state,action)=>{
+      if(action.payload){
+        state.user = action.payload;
+      }
+    })
   },
 })
 

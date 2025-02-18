@@ -16,6 +16,10 @@ import { getToken } from "../../../helpers/utilityFns";
 import axios from "axios";
 import { constant } from "../../../helpers/constants";
 import { useFetch } from "../../../helpers/useFetch";
+import { useMutation } from "@tanstack/react-query";
+import { apiCall } from "../../../utils/httpMethod";
+import ShowSnackbar from "../../Common/UI/ShowSnackbar";
+import useSnack from "../../../helpers/useSnack";
 
 
 
@@ -23,9 +27,11 @@ function OrgUpdateForm() {
   const user = useSelector((state: RootState) => state.userState.user);
 
   const [formState, setFormState] = useState<ErrorState>(initialformState);
-
+  const {snackState,snackOpen,snackClose} =useSnack();
   const [fetchedData,loading,error] = useFetch<IOrganization>('/organization/'+ user!.organization_id)
-      
+  const {mutateAsync,isPending} =useMutation({
+    mutationFn:(body:unknown)=>apiCall('POST','organization/update',null,body)
+  })
   let data: IOrganization;
   if (!error) {
     data = fetchedData as IOrganization;
@@ -56,23 +62,18 @@ function OrgUpdateForm() {
       const formData = new FormData(event.target as HTMLFormElement);
       const body = Object.fromEntries(formData.entries());
       console.log(body);
-      const res = await axios.post(
-        constant.SERVER + "/organization/update",
-        {
-          ...body,
-          id:data!.id,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: getToken(),
-          },
-        }
-      );
-      alert(res);
+      const response = await mutateAsync({
+        ...body,
+        id:data!.id,
+      })
+      if(response.success){
+        snackOpen(true,"success",'updated successfully',);
+      }
+      else{
+        snackOpen(true,"error",'update failed');
+      }
     } else {
       setFormState(populateFormState(formState));
-      alert("failed");
     }
   }
 
@@ -147,6 +148,7 @@ function OrgUpdateForm() {
           </Button>
         </div>
       </form>
+      <ShowSnackbar state={snackState} closeFn={snackClose}/>
     </div>
   );
 }

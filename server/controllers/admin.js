@@ -3,6 +3,8 @@ import { addAdmin, searchAdmin } from "../lib/admin.js";
 import bcrypt from "bcrypt"
 import { searchOrganizations } from "../lib/organization.js";
 import { searchUsers } from "../lib/users.js";
+import passwordGenerator from 'generate-password';
+import { sendSignUPMailForUser } from "../services/mailServices.js";
 
 export async function handleAdminRegister(req,res){
     
@@ -10,11 +12,11 @@ export async function handleAdminRegister(req,res){
 
     
     try {
-        // const password = passwordGenerator({length:10,number:true});
-        // const hashPassword = await bcrypt.hash(password,3);
-        const hashPassword = '123456';
+        const password = passwordGenerator.generate({length:10,number:true});
+        const hashPassword = await bcrypt.hash(password,3);
         const addUserData = await addAdmin(name,email,hashPassword,number,organization_id);
         delete addUserData.password;
+        sendSignUPMailForUser(email,password);
         return res.json(new actionResponse(200,addUserData,true));
    } catch (error) {
           console.log(error);

@@ -1,13 +1,14 @@
 import express from 'express';
 import { generateToken } from '../auth/auth.js';
-import { getUser } from '../controllers/users.js';
 import { auth } from '../middlewares/auth.js';
 import { ApiUserResponse } from '../helpers/Response.js';
+import {  searchForUser } from '../lib/users.js';
+import { getUser } from '../controllers/users.js';
 
 
 const router  = express.Router();
 
-router.get('/verify',auth,(req,res)=>{
+router.get('/verify',auth,async (req,res)=>{
     console.log(req.user);
     
    try {

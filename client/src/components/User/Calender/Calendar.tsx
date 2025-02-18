@@ -12,7 +12,6 @@ interface CalendarProps{
 
 export default function Calendar({events,handleOpen}:CalendarProps) {
   const handleDateClick = (arg:DateClickArg) => {
-    console.log(arg);
     
     handleOpen(arg.dateStr);
   }
