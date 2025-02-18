@@ -6,10 +6,12 @@ const SERVER  = constant.SERVER;
 
 type HttpMethod ='GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' ;
 
-export async function apiCall(call:HttpMethod,url:string,params?:unknown,body?:unknown){
+export async function apiCall(method:HttpMethod,url:string,params?:unknown,body?:unknown){
     const reqURL = SERVER + '/' + url;
+    console.log(params);
+    
     try {
-        switch(call){
+        switch(method){
             case 'GET':{
                 const {data} = await axios.get(reqURL,{
                     params,
@@ -17,7 +19,14 @@ export async function apiCall(call:HttpMethod,url:string,params?:unknown,body?:u
                         'Authorization' : getToken(),
                     }
                 })
-                return data;
+                if(Boolean(data.success)){
+                    return data;
+                }
+                else{
+                    throw new Error(data.data.message);
+                }
+                
+                
             };
             case 'POST':{
                 const {data} = await axios.post(reqURL,body,{
@@ -27,6 +36,7 @@ export async function apiCall(call:HttpMethod,url:string,params?:unknown,body?:u
                     }
                 })
                 return data;
+                
             };
             case 'PATCH':{
                 const {data} = await axios.patch(reqURL,body,{
@@ -60,6 +70,10 @@ export async function apiCall(call:HttpMethod,url:string,params?:unknown,body?:u
         }
     } catch (error) {
         const message = (error as {message:string}).message;
+        if(method === 'GET'){
+            throw new Error(message);
+        }
+        
         return {status:false,message:message}
     }
 }

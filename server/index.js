@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import env from './constants.js'
 import {connectDb} from './db/initDb.js';
-
+import morgan from 'morgan';
 
 //MIDDLEWARES
 import { logger } from './middlewares/helperMiddlewares.js';
@@ -28,7 +28,8 @@ const options= {
     exposedHeaders:['Authorization']
 }
 
-app.use(logger);
+// app.use(logger);
+app.use(morgan('dev'));
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -42,7 +43,7 @@ app.use('/transactions',auth,transactionRouter);
 app.use('/withdrawals',auth,withdrawalRouter)
 
 app.get('/',(req,res)=>{
-    res.send('hello')
+    res.send('Server is running')
 })
 
 

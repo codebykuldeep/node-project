@@ -1,6 +1,6 @@
 type IItemInSide ={
     text:string;
-    icon:string;
+    icon:string | React.ReactNode;
     link:string;
   }
 interface IItemMain{

@@ -19,9 +19,9 @@ export async function handleGetOrgansitionTransactions(req,res) {
     try {
         const data = await getAllOrgTransactions(id,pending);
         
-        return res.json(new actionResponse(200,data,true));
+        return res.status(200).json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,error,false))
+        return res.status(500).json(new actionResponse(200,error,false))
     }
 }
 

@@ -16,7 +16,7 @@ export async function handleGetAllOrganization(req,res) {
 
 export async function handleNewRegister(req,res) {
     if(!req.file){
-        return res.json(new actionResponse(500,error,false));
+        return res.json(new actionResponse(500,{message:'failed to create org , image issues'},false));
     }
     
     const {name,description,payment_id} = req.body;
@@ -39,9 +39,9 @@ export async function handleGetOrganization(req,res) {
     try {
         const data = await getOrganization(id);
         
-        return res.json(new actionResponse(200,data,true));
+        return res.status(200).json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,error,false))
+        return res.status(500).json(new actionResponse(200,error,false))
     }
     
 }

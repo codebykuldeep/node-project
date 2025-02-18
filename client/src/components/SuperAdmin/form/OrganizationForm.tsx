@@ -4,40 +4,14 @@ import classes from './form.module.css';
 import { Button, InputLabel } from '@mui/material';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
 import { ErrorState } from '../../../types/errorTypes';
-import { constant } from '../../../helpers/constants';
-import { getToken } from '../../../helpers/utilityFns';
-import axios from 'axios';
+import { apiCall } from '../../../utils/httpMethod';
 
-const initialformState ={
-  name:{
-      status:false,
-      message:'',
-      value:''
-  },
-  description:{
-      status:false,
-      message:'',
-      value:''
-  },
-  payment_id:{
-      status:false,
-      message:'',
-      value:''
-  },
-  payment_url:{
-      status:false,
-      message:'',
-      value:''
-  },
-}
 
 function OrganizationForm() {
   const [formState,setFormState] = useState<ErrorState>(initialformState);
   const [submit,setSubmit] = useState(false);
 
   function handleFormChange(event:React.ChangeEvent<HTMLInputElement>){
-    
-    
     const name = event.target.name;
     const value = event.target.value;
 
@@ -58,14 +32,9 @@ function OrganizationForm() {
     if(checkValidFormState(formState)){
       
       const formData = new FormData(event.target as HTMLFormElement );
-      const body = Object.fromEntries(formData.entries());
-      const {data} = await axios.post(constant.SERVER+'/organization/register',body,{
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization':getToken()
-        }
-      })
-      alert(data.data.success)
+      const data = await apiCall('POST','organization/register',null,formData);
+      console.log('form sub',data);
+      
       setFormState(initialformState);
       (event.target as HTMLFormElement).reset();
     }
@@ -113,11 +82,36 @@ function OrganizationForm() {
       <InputField  type='file' name='payment_url' label='' onChange={handleImage} formState={formState} />
       </div>
       <div>
-      <Button type='submit' variant='contained' disabled={submit}>ADD</Button>
+      <Button type='submit' variant='contained' loading={submit} loadingPosition='end'>ADD</Button>
       </div>
       </form>
     </div>
   )
 }
 
-export default OrganizationForm
+export default OrganizationForm;
+
+
+
+const initialformState ={
+  name:{
+      status:false,
+      message:'',
+      value:''
+  },
+  description:{
+      status:false,
+      message:'',
+      value:''
+  },
+  payment_id:{
+      status:false,
+      message:'',
+      value:''
+  },
+  payment_url:{
+      status:false,
+      message:'',
+      value:''
+  },
+}

@@ -31,7 +31,7 @@ function Sidebar({list}:SideBarProps) {
       </div>
       <div className={classes.item_container}>
         {list.map(({ heading ,items}) => (
-          <div className={classes.item_box}>
+          <div className={classes.item_box} key={heading}>
           {!open ? <div className={classes.item_head}>{heading}</div> : <Divider className={classes.divide}/>}
           {
             items.map(({icon,link,text})=>(

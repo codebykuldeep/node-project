@@ -1,7 +1,7 @@
 import { db } from "../db/initDb.js";
 
 export async function getUserWithdrawals(id) {
-    const res  = await db.query('SELECT * FROM withdrawals WHERE user_id = $1 ;',[id]);
+    const res  = await db.query('SELECT * FROM transactions WHERE user_id = $1 AND payment_type = false ;',[id]);
 
     return res.rows;
 }
@@ -22,7 +22,7 @@ export async function deleteWithdrawalReq(id,user_id) {
 
 
 export async function getOrganizationWithdrawals(id) {
-    const res = await db.query('SELECT * FROM withdrawals WHERE organization_id = $1 ;',[id]);
+    const res = await db.query('SELECT * FROM transactions WHERE organization_id = $1  AND payment_type = false ;',[id]);
     return res.rows;
 }
 

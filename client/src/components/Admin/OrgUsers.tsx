@@ -1,83 +1,117 @@
 import { useEffect, useState } from 'react';
-import DataTable from '../Common/DataTable';
 import { IUser } from '../../types/dataTypes';
-import { constant } from '../../helpers/constants';
-import axios from 'axios';
-import { getToken } from '../../helpers/utilityFns';
-import { Column, RadioDataTypeForTable } from '../../types/uiTypes';
-import { Link } from 'react-router-dom';
+import { RadioDataTypeForTable } from '../../types/uiTypes';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import classes from './org-user.module.css'
 import SelectTypeRadio from '../Common/SelectTypeRadio';
+import { ColumnType } from '../../types/listTypes';
+import ShowTable from '../Common/ShowTable';
+import { useQuery } from '@tanstack/react-query';
+import { apiCall } from '../../utils/httpMethod';
 
-const columns: readonly Column[] = [
-    { id: 'name', label: 'Name', minWidth: 150,},
-    { id: 'email', label: 'Email', minWidth: 150 },
-    {
-        id: 'status',
-        label: 'Status',
-        minWidth: 170,
-        align: 'center',
-    },
-    { id: 'number', label: 'Phone Number', minWidth: 150 },
-    {id:'action',label:'Action',minWidth:150,actionElement:<button onClick={(e)=>{console.log(e)}}>Deactivate</button>}
-
-  ];
 
 function OrgUsers() {
-    const user = useSelector((state:RootState)=>state.userState.user)
-    const [data,setData] = useState<IUser[] | null>(null);
-    const [rows,setRows] = useState<IUser[] | null>(null);
+  const navigate = useNavigate();
+  const [rows, setRows] = useState<IUser[]>([]);
+  const { data, isFetching, isError } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => apiCall("GET", "user"),
+  });
+  useEffect(() => {
+    if (data && data.data.length > 0) {
+      setRows(data.data);
+    }
+  }, [data]);
+
+  function handleDataType(action: RadioDataTypeForTable) {
+    const oldRows = data.data as IUser[];
+    let newRows = oldRows;
+    if (oldRows && action === "disabled") {
+      newRows = oldRows.filter((entry) => Boolean(entry.status) === false);
+    } else if (data && action === "active") {
+      newRows = oldRows.filter((entry) => Boolean(entry.status) === true);
+    }
+    console.log(action);
+
+    setRows(newRows);
+  }
+  function handleRowClick(row:IUser){
+    const {user_id} = row;
     
-  useEffect(()=>{
-    async function getData() {
-        const {data} = await axios.get(constant.SERVER +'/user/org/'+user!.organization_id,{
-            headers:{
-                'Authorization':getToken(),
-            }
-        })
-        console.log(data);
-        
-        setData(data.data);
-        setRows(data.data);
-    }
-    try {
-        getData();
-    } catch (error) {
-        console.log(error);
-        
-    }
-  },[user])
-  
-  function handleDataType(action:RadioDataTypeForTable){
-            let newRows = data;
-            if(data && action === 'disabled'){
-                newRows = data.filter((entry)=>Boolean(entry.status) === false)
-            }
-            else if(data && action === 'active'){
-                newRows = data.filter((entry)=>Boolean(entry.status) === true)
-            }
-            console.log(action);
-            
-            setRows(newRows);
-            
-        }
-  return (
-    <div className={classes.container}>
+    navigate(`${user_id}`);      
+  }
+  if (isFetching) {
+    return <p>Loading Data....</p>;
+  }
+
+  if (isError) {
+    return <p>Error Loading page</p>;
+  }
+
+return (
+  <div className={classes.container}>
       <div className={classes.heading}>
-        <h2>Users</h2>
-        <Link to={"add"}>
-          <Button variant="contained">Add</Button>
-        </Link>
+          <h2>Users</h2>
+          <Link to={'add'}><Button variant='contained'>Add</Button></Link>
       </div>
       <div>
-        <SelectTypeRadio onChange={handleDataType} />
-      </div>
-      {data && rows && rows.length > 0 && <DataTable columns={columns} rows={rows} />}
-    </div>
-  );
+                  <SelectTypeRadio onChange={handleDataType}/>
+              </div>
+      {data && rows &&  rows.length> 0 && <ShowTable<IUser> columns={UserColumn} rows={rows} openModal={handleRowClick} />}
+  </div>
+)
 }
 
 export default OrgUsers;
+
+
+
+const UserColumn: ColumnType[] = [
+{
+  id: "user_id",
+  label: "User ID",
+},
+{
+  id: "name",
+  label: "Name",
+},
+{
+  id: "email",
+  label: "Email",
+},
+{
+  id: "number",
+  label: "Phone Number",
+},
+{
+  id: "amount",
+  label: "Deposited Amount",
+  align:'center',
+  format: (value) => {
+      return `$ ${value}`;
+  },
+},
+{
+  id: "interest",
+  label: "Interest Rate",
+  align:'center',
+  format: (value) => {
+      return `${value}%`;
+  },
+},
+{
+  id: "organization_id",
+  label: "Org Id",
+},
+{
+  id: "status",
+  label: "User Status",
+  format: (value) => {
+    if (Boolean(value) === false) {
+      return "inactive";
+    }
+    return "active";
+  },
+},
+];

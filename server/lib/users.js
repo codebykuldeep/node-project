@@ -85,9 +85,9 @@ export async function updateUser(id,email,name,number,role) {
 
 
 export async function getSpecificUser(id){
-    const res = await db.query(`SELECT * FROM users where id = $1 ;`,[id]);
+    const res = await db.query(`SELECT * FROM users where user_id = $1 ;`,[id]);
 
-    return res.rows.length > 0 ? res.rows[0] : undefined;
+    return res.rows[0];
 }
 
 
@@ -101,10 +101,13 @@ export async function getUserByOrganization(id) {
 export async function switchUserStatus(id,status,role) {
     let res;
     if(role === 'ADMIN'){
-        res = await db.query(`UPDATE admin SET status = $1 WHERE id = $2 ;`,[status,id]);
+        res = await db.query(`UPDATE admin SET status = $1 WHERE admin_id = $2 ;`,[status,id]);
+
     }
     else{
-        res = await db.query(`UPDATE users SET status = $1 WHERE id = $2 ;`,[status,id]);
+        console.log('user');
+        
+        res = await db.query(`UPDATE users SET status = $1 WHERE user_id = $2 ;`,[status,id]);
     }
     return res.rows;
 }
@@ -118,6 +121,6 @@ export async function searchUsers(query) {
 
 //ADMIN QUERIES
 export async function getAdmin(id) {
-    const res = await db.query(`SELECT * FROM admin where id = $1 ;`,[id]);
+    const res = await db.query(`SELECT * FROM admin where admin_id = $1 ;`,[id]);
     return res.rows.length > 0 ? res.rows[0] : undefined;
 }

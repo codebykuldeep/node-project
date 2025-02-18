@@ -17,28 +17,7 @@ import axios from "axios";
 import { constant } from "../../../helpers/constants";
 import { useFetch } from "../../../helpers/useFetch";
 
-const initialformState = {
-  name: {
-    status: false,
-    message: "",
-    value: "",
-  },
-  description: {
-    status: false,
-    message: "",
-    value: "",
-  },
-  payment_id: {
-    status: false,
-    message: "",
-    value: "",
-  },
-  payment_url: {
-    status: false,
-    message: "",
-    value: "",
-  },
-};
+
 
 function OrgUpdateForm() {
   const user = useSelector((state: RootState) => state.userState.user);
@@ -203,3 +182,29 @@ function generateFormState(initialformState: ErrorState, data: IOrganization) {
   );
   return newState;
 }
+
+
+
+
+const initialformState = {
+  name: {
+    status: false,
+    message: "",
+    value: "",
+  },
+  description: {
+    status: false,
+    message: "",
+    value: "",
+  },
+  payment_id: {
+    status: false,
+    message: "",
+    value: "",
+  },
+  payment_url: {
+    status: false,
+    message: "",
+    value: "",
+  },
+};

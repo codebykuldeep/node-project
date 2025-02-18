@@ -10,6 +10,7 @@ import { ErrorState } from '../../../types/errorTypes';
 import { checkValidFormState, populateFormState, validation } from '../../../utils/validationMethods';
 import { useFetch } from '../../../helpers/useFetch';
 import Loading from '../../Common/Loading';
+import { apiCall } from '../../../utils/httpMethod';
 
 const initialformState ={
   name:{
@@ -71,17 +72,19 @@ function AdminForm() {
         if(checkValidFormState(formState)){
           const formData = new FormData(event.target as HTMLFormElement );
           const body = Object.fromEntries(formData.entries());
+          
+          const data = await apiCall('POST','admin/register',null,body);
           console.log(body);
           
-          const {data} = await axios.post(constant.SERVER+'/admin/register',body,{
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization':getToken()
-            }
-          })
-          alert(data.data.success)
-          setFormState(initialformState);
-          (event.target as HTMLFormElement).reset();
+          alert(data.success)
+          if(data.success){
+            // setFormState(initialformState);
+          // (event.target as HTMLFormElement).reset();
+          }
+          else{
+            
+          }
+          
         }
         else{
           setFormState(populateFormState(formState));
@@ -112,16 +115,17 @@ function AdminForm() {
           onChange={handleFormChange}
           error={formState['organization_id'].status}
         >
+          <MenuItem disabled value=''>Select a Option</MenuItem>
           {
             organizations?.map((organization,index)=>(
-                <MenuItem key={index} value={organization.id}>{organization.name}</MenuItem>
+                <MenuItem key={index} value={organization.organization_id}>{organization.name}</MenuItem>
             ))
           }
         </Select>
         {formState['organization_id'].message && <p>{formState['organization_id'].message}</p>}
       </FormControl>
-      <div>
-      <Button type='submit' variant='contained'>ADD</Button>
+      <div className={'main-btn'}>
+      <Button type='submit' variant='contained' >ADD</Button>
       </div>
       </form>
     </div>
