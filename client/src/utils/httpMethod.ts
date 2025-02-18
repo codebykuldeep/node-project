@@ -6,9 +6,9 @@ const SERVER  = constant.SERVER;
 
 type HttpMethod ='GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' ;
 
-export async function apiCall(method:HttpMethod,url:string,params?:unknown,body?:unknown){
-    const reqURL = SERVER + '/' + url;
-    console.log(params);
+export async function apiCall(method:HttpMethod,endpoint:string,params?:unknown,body?:unknown){
+    const reqURL = SERVER + '/' + endpoint;
+    
     
     try {
         switch(method){

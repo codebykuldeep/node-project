@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import PaymentForm from '../form/PaymentForm';
-import { Button } from '@mui/material';
-import QrCodeImage from '../../../assets/qr-code.png';
 import classes from './payment-modal.module.css'
 import { IOrganization } from '../../../types/dataTypes';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import axios from 'axios';
-import { constant } from '../../../helpers/constants';
-import { getToken } from '../../../helpers/utilityFns';
 
 const style = {
   position: 'absolute',

@@ -17,7 +17,7 @@ export async function getAllOrgTransactions(id,pending) {
 }
 
 export async function createNewTransaction(amount,organization_id,user_id,image,date) {
-    const res = await db.query('INSERT INTO transactions(amount,organization_id,user_id,image_url,created_at) VALUES( $1 ,$2 ,$3 ,$4 , $5);',[amount,organization_id,user_id,image,date]);
+    const res = await db.query('INSERT INTO transactions(amount,organization_id,user_id,image_url,date) VALUES( $1 ,$2 ,$3 ,$4 , $5);',[amount,organization_id,user_id,image,date]);
     return res;
 }
 
@@ -31,8 +31,17 @@ export async function updateTransactionStatus(transaction_id,status) {
     return res;
 }
 
-export async function getUserTransactions(id) {
-    const res = await db.query(`SELECT * FROM transactions WHERE user_id = $1 ;`,[id]);
+export async function getUserTransactions(id,type) {
+    let res;
+    if(type === true){
+        res  = await db.query('SELECT * FROM transactions WHERE user_id = $1 AND payment_type = true ;',[id]);
+    }
+    else if((type === false)){
+        res  = await db.query('SELECT * FROM transactions WHERE user_id = $1 AND payment_type = false ;',[id]);
+    }
+    else{
+        res = await db.query(`SELECT * FROM transactions WHERE user_id = $1 ;`,[id]);
+    }
      
     return res.rows;
 }

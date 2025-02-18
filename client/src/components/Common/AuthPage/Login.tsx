@@ -9,6 +9,7 @@ import { getDashboardPath, setToken } from "../../../helpers/utilityFns";
 import { apiCall } from "../../../utils/httpMethod";
 import AuthImg from '../../../assets/auth-img.png'
 import InputField from "../InputField";
+import { FormHelperText } from "@mui/material";
 
 interface IState{
   email:{
@@ -40,6 +41,7 @@ const initialState ={
 function Login() {
     const navigate = useNavigate();
     const [userState, setUserState] = useState<IState>(initialState)
+    const [error,setError] = useState('');
     const [submit,setSubmit] = useState(false);
     const dispatch = useDispatch<AppDispatch>()
 
@@ -69,6 +71,9 @@ function Login() {
           dispatch(userActions.setUser({user}));
           navigate('/dashboard/'+getDashboardPath(user));
          }
+         else{
+          setError(data.data.message)
+         }
          setSubmit(false);
     }
 
@@ -87,6 +92,9 @@ function Login() {
         </div>
         <InputField type="text" label="Email" name="email" formState={{}}  onChange={handleChange}>Enter your email</InputField>
         <InputField type="password" label="Password" name="password" formState={{}}  onChange={handleChange}>Enter your password</InputField>
+        {
+          error && <FormHelperText error sx={{fontSize:'1rem'}}>{error}</FormHelperText>
+        }
         <div className={'main-btn'}>
           <Button  type="submit" variant="contained" loading={submit} loadingPosition="end">
             Login

@@ -36,7 +36,7 @@ function Transactions({id}:{id?:string}) {
   if(isError){
     return <p>Error while loading page</p>
   }
-  const rows = data.data;
+  const rows = data.data; 
 
   return (
     <div  className={classes.container}>

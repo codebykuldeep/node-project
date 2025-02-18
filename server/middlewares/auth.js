@@ -16,6 +16,8 @@ export async function auth(req,res,next){
     } catch (error) {
         return res.status(401).send({status:401,message:'Unauthorized access',success:false})
     }
+    
+    
     next();
 }
 

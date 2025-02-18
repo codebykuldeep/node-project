@@ -19,15 +19,16 @@ import OrgUsers from './components/Admin/OrgUsers';
 import Transactions from './components/Admin/Transactions/Transactions';
 import PendingTransactions from './components/Admin/Transactions/PendingTrasactions';
 import AddUser from './components/Admin/Form/AddUser';
-import Account from './components/Admin/Account';
+import Account from './components/Common/Account/Account';
 import UserTransactions from './components/User/Transactions/UserTransactions';
 import Withdrawal from './components/User/Transactions/Withdrawal';
 import WithdrawPage from './components/User/Transactions/WithdrawPage';
 import OrganizationDetail from './components/SuperAdmin/DetailPage/Organization/OrganizationDetail';
 import AdminDetail from './components/SuperAdmin/DetailPage/Admin/AdminDetail';
 import UserDetail from './components/SuperAdmin/DetailPage/UserPage/UserDetail';
-import CalenderSection from './components/User/Calender/CalendarSection';
+
 import Withdrawals from './components/Admin/Transactions/Withdrawals';
+import CalenderPage from './components/User/Calender/CalenderPage';
 
 
 const router = createBrowserRouter([
@@ -55,7 +56,7 @@ const router = createBrowserRouter([
           },
           {
             path:'calendar',
-            element:<CalenderSection/>
+            element:<CalenderPage/>
           },
           {
             path:'transactions',

@@ -4,11 +4,16 @@ import { uploadImage } from "../services/cloudinary.js";
 
 export async function handleGetUserTransactions(req,res) {
     const {id} = req.params;
+    const {type} =req.query;
+    const action = type === 'credit'  ? true : type === 'debit' ? false : null ;
+
     try {
-        const data = await getUserTransactions(id);
-        return res.json(new actionResponse(200,data,true));
+        const data = await getUserTransactions(id,action);
+        return res.status(200).json(new actionResponse(200,data,true));
     } catch (error) {
-        return res.json(new actionResponse(200,error,false))
+        console.log(error);
+        
+        return res.status(500).json(new actionResponse(500,error,false))
     }
 }
 
@@ -43,10 +48,11 @@ export async function handleUpdateTransactions(req,res) {
 
 export async function handleNewPayment(req,res){
     if(!req.file){
-        return res.json(new actionResponse(500,error,false));
+        return res.status(500).json(new actionResponse(500,error,false));
     }
-    const {amount ,organization_id,user_id,date} = req.body;
-    console.log(req.body);
+    const {amount ,date} = req.body;
+    const {user_id , organization_id} = req.user;
+    
     
     try {
         const image = await uploadImage(req.file.path);

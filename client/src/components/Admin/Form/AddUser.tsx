@@ -9,6 +9,10 @@ import { constant } from '../../../helpers/constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { useMutation } from '@tanstack/react-query';
+import { apiCall } from '../../../utils/httpMethod';
+import useSnack from '../../../helpers/useSnack';
+import ShowSnackbar from '../../Common/UI/ShowSnackbar';
 
 const initialformState ={
   name:{
@@ -37,7 +41,10 @@ const initialformState ={
 function AddUser() {
   const user = useSelector((state:RootState)=>state.userState.user)
   const [formState,setFormState] = useState<ErrorState>(initialformState);
-  
+  const {mutateAsync,isPending} = useMutation({
+    mutationFn:(body:unknown)=>apiCall('POST','user/register',null,body)
+  })
+  const {snackState,snackClose,snackOpen} =useSnack();
     function handleFormChange(event:React.ChangeEvent<HTMLInputElement>){
       
       
@@ -63,25 +70,20 @@ function AddUser() {
       if(checkValidFormState(formState)){
         const formData = new FormData(event.target as HTMLFormElement);
       const body = Object.fromEntries(formData.entries());
-      console.log(body);
-      const res = await axios.post(
-        constant.SERVER + "/user/register",
-        {
-          ...body,
-          organization_id:user!.organization_id
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: getToken(),
-          },
-        }
-      );
-      alert('success');
+      const response = await mutateAsync({
+        ...body,
+        organization_id:user!.organization_id
+      })
+      if(response.success){
+        snackOpen(true,'success','User added successful')
+      }
+      else{
+        snackOpen(false,'error','Failed to perform operation')
+      }
+      
       }
       else{
         setFormState(populateFormState(formState));
-        alert('failed')
       }
     }
     
@@ -96,9 +98,10 @@ function AddUser() {
       <InputField type='number' name='number' label='Phone Number' onChange={handleFormChange} formState={formState}/>
       <InputField type='number' name='interest' label='Interest Rate' onChange={handleFormChange} formState={formState}/>
       <div>
-      <Button type='submit' variant='contained'>ADD</Button>
+      <Button type='submit' variant='contained' loading={isPending} loadingPosition='end'>ADD</Button>
       </div>
       </form>
+      <ShowSnackbar state={snackState} closeFn={snackClose}/>
     </div>
   )
 }

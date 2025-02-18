@@ -72,15 +72,15 @@ export async function getUser(user) {
 export async function updateUser(id,email,name,number,role) {
     let result;
     if(role === 'SUPER_ADMIN'){
-        result = await db.query('UPDATE super_admin SET email = $1 , name = $2 , number = $3 WHERE id = $4 ;',[email,name,number,id]);
+        result = await db.query('UPDATE super_admin SET email = $1 , name = $2 , number = $3 WHERE super_id = $4 ;',[email,name,number,id]);
     }
     else if(role === 'ADMIN'){
-        result = await db.query('UPDATE admin SET email = $1 , name = $2 , number = $3 WHERE id = $4 ;',[email,name,number,id]);
+        result = await db.query('UPDATE admin SET email = $1 , name = $2 , number = $3 WHERE admin_id = $4 ;',[email,name,number,id]);
     }
     else{
-        result = await db.query('UPDATE users SET email = $1 , name = $2 , number = $3 WHERE id = $4 ;',[email,name,number,id]);
+        result = await db.query('UPDATE users SET email = $1 , name = $2 , number = $3 WHERE user_id = $4 ;',[email,name,number,id]);
     }
-    return res
+    return result.rows;
 }
 
 

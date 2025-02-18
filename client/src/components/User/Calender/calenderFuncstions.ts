@@ -4,33 +4,28 @@ interface DateObj{
     [index:string]:null | true | false;
 }
 
-// export function allPassedDate(date:string){
-//     const joinedDate = new Date(date);
-//     const currentDate = new Date();
-//     const passedDates:DateObj ={}
-//     while(joinedDate <= currentDate){
 
-//     }
-// }
 
 function getAllPassedDate(date:string){
     const joinedDate = new Date(date);
     const currentDate = new Date();
-    const passedDates:DateObj ={}
     
+    
+    const passedDates:DateObj ={}
+    currentDate.setDate(currentDate.getDate() + 1)
     while(joinedDate <= currentDate){
         const convertedDate = joinedDate.toISOString().split('T')[0];
         passedDates[convertedDate] = false;
         joinedDate.setDate(joinedDate.getDate() + 1);
     }
-    console.log(passedDates);
+    
     return passedDates;
 }
 
 export function createTransactionObject(data:ITransaction[]){
     const transObj:DateObj ={};
     data.forEach((item)=>{
-        const date = new Date(item.created_at).toISOString().split('T')[0];
+        const date = new Date(item.date).toISOString().split('T')[0];
         if(item.approved === null){
             transObj[date] = null;
         }
@@ -81,7 +76,7 @@ export function createEventArray(userDate:string,data:ITransaction[]){
           }
           arr.push(event);
     }
-    console.log(arr);
+    
     
     return arr;
 }

@@ -8,7 +8,7 @@ export async function getUserWithdrawals(id) {
 
 
 export async function createWithdrawalReq(id,org_id,amount) {
-    const res  = await db.query('INSERT INTO withdrawals(amount,organization_id,user_id) VALUES( $1 , $2 , $3 );',[amount,org_id,id]);
+    const res  = await db.query('INSERT INTO transactions(amount,organization_id,user_id ,payment_type) VALUES( $1 , $2 , $3 ,false);',[amount,org_id,id]);
 
     return res.rows;
 }

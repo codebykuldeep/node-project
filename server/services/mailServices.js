@@ -13,18 +13,16 @@ const transporter = nodemailer.createTransport({
     },
   });
 
-  
-
-
-
-
-  async function sendSignUPMail(email){
+  export async function sendSignUPMailForUser(email,password){
     const mailOptions = {
         from: env.NODE_MAIL,
-        to: env.NODE_MAIL,
-        subject: "Hello ",
+        to: email,
+        subject: "Hello From Groww More ",
         text: "This is a test email sent .",
-        html:'<h1>Hello I am sending a mail from server .</h1>'
+        html:`<h1>Hello ,Welcome to Groww More</h1>
+              <p>Email - ${email}</p>
+              <p>Password - ${password}</p>
+              `
     };
     try {
         const info = await transporter.sendMail(mailOptions)
