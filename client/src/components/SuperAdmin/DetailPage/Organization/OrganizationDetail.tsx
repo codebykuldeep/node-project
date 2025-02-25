@@ -1,37 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { IOrganization } from '../../../../types/dataTypes';
-import axios from 'axios';
-import { getToken } from '../../../../helpers/utilityFns';
+
 import classes from './organization.module.css'
-import { constant } from '../../../../helpers/constants';
-import { Button } from '@mui/material';
 import ActionButton from './ActionButton';
 import Transactions from '../../../Admin/Transactions/Transactions';
-import { useFetch } from '../../../../helpers/useFetch';
+import ShowHomeData from '../../../Admin/Home/ShowHomeData';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { apiCall } from '../../../../utils/httpMethod';
 
 function OrganizationDetail() {
     const {id} = useParams();
-    
-    //const [data,setData] = useState<IOrganization | null>(null);
-    const [update,setUpdate] = useState(1);
-    const [fetchedData,loading,error] = useFetch<IOrganization>('/organization/'+id)
-        
-    let data: IOrganization;
-    if (!error) {
-      data = fetchedData as IOrganization;
-    } else {
-      return <p>Error while loading page</p>;
+    const {data,isFetching,isError,refetch} = useQuery({
+        queryKey:['organization','detail',id],
+        queryFn:()=>apiCall('GET','organization/detail/'+ id),
+        placeholderData:keepPreviousData
+       })
+      
+       
+    if (isError) {
+        return <p>Error while loading page</p>;
     }
     
     console.log(data);
     
-    if(loading){
+    if(isFetching){
         return <p>Loading....</p>;
     }
     function triggerUpdate(){
-        setUpdate(prev=>prev+1);
+        refetch();
     }
+    const organization = data.data.organization;
   return (
     <div>
         {
@@ -40,14 +38,12 @@ function OrganizationDetail() {
                 <div className={classes.heading}>
                     <h1>Organisation Details</h1>
                 </div>
-                <div className={classes.detail}>
-                    <div><span>Name :</span><h2>{data.name}</h2></div>
-                    <div><span>Description :</span><p>{data.description}</p></div>
-                    <div><span>Id :</span><p>{data.id}</p></div>
-                </div>
-                <ActionButton organization={data} triggerUpdate={triggerUpdate}/>
+                <ActionButton organization={organization} triggerUpdate={triggerUpdate}/>
                 <div>
-                    <Transactions id={data.id}/>
+                    <ShowHomeData data={data.data}/>
+                </div>
+                <div>
+                    <Transactions id={organization.organization_id}/>
                 </div>
                 </div>
             )

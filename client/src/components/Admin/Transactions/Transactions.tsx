@@ -14,9 +14,10 @@ import ShowTable from '../../Common/ShowTable';
 function Transactions({id}:{id?:string}) {
   const user = useSelector((state:RootState)=>state.userState.user)
   const [modalData,setModalData] = useState<ITransaction | null>(null)
+  const fetchId = id || user!.organization_id;
   const {data,isFetching,isError,refetch} = useQuery({
     queryKey:[],
-    queryFn:()=>apiCall('GET','transactions/org/'+user!.organization_id,{
+    queryFn:()=>apiCall('GET','transactions/org/'+ fetchId,{
       type:'all'
     })
   })

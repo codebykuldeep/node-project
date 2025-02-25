@@ -88,7 +88,7 @@ export default Withdrawals;
 
 const columns: ColumnType[] = [
   { id: "user_id", label: "User ID" },
-  { id: "paid_amount", label: "Amount"},
+  { id: "amount", label: "Amount"},
   {
     id: "payment_type",
     label: "Payment Type",

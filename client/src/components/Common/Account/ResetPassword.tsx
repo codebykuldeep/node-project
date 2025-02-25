@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InputField from "../InputField";
-import { Box, Button, InputAdornment } from "@mui/material";
+import { Alert, Box, Button, InputAdornment } from "@mui/material";
 import classes from "./form.module.css";
 import {
   checkValidFormState,
@@ -9,7 +9,11 @@ import {
 } from "../../../utils/validationMethods";
 import { ErrorState } from "../../../types/errorTypes";
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import useSnack from "../../../helpers/useSnack";
+import ShowSnackbar from "../UI/ShowSnackbar";
+import { useMutation } from "@tanstack/react-query";
+import { apiCall } from "../../../utils/httpMethod";
 
 const initialformState = {
   password: {
@@ -31,6 +35,11 @@ const initialformState = {
 
 function ResetPassword() {
   const [formState, setFormState] = useState<ErrorState>(initialformState);
+  const { snackState, snackOpen, snackClose } = useSnack();
+  const {isPending,mutateAsync} = useMutation({
+    mutationFn:(body:unknown)=>apiCall('POST','update-password',null,body),
+  })
+
   function handleFormChange(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
     const value = event.target.value;
@@ -45,17 +54,31 @@ function ResetPassword() {
       },
     }));
   }
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(formState);
 
     if (checkValidFormState(formState)) {
-      alert("succces");
+      if (formState.password.value !== formState.confirm_password.value) {
+        snackOpen(true, "warning", "Password mismatch ,Please recheck");
+      } else {
+        const body = {
+          password: formState.password.value,
+          old_password: formState.old_password.value,
+        };
+        const response = await mutateAsync(body);
+        if(response.success){
+          snackOpen(true, "success", response.data.message);
+        }
+        else{
+          snackOpen(true, "error", response.data.message);
+        }
+      }
     } else {
       setFormState(populateFormState(formState));
-      alert("failed");
     }
   }
+  console.log(formState);
+  
   return (
     <div className={classes.container}>
       <form className={classes.form} onSubmit={handleSubmit}>
@@ -84,7 +107,10 @@ function ResetPassword() {
           formState={formState}
         />
         <Box>
-          <Button type="submit" variant="contained">
+        {snackState.open && <Alert severity={snackState.status}>{snackState.message}</Alert>}
+        </Box>
+        <Box>
+          <Button type="submit" variant="contained" loading={isPending} loadingPosition="end">
             Update
           </Button>
         </Box>

@@ -1,10 +1,8 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import classes from "./organization.module.css";
-import { constant } from "../../../../helpers/constants";
 import { IOrganization } from "../../../../types/dataTypes";
-import axios from "axios";
-import { getToken } from "../../../../helpers/utilityFns";
+import { apiCall } from "../../../../utils/httpMethod";
 
 
 interface ActionButtonProps{
@@ -20,18 +18,13 @@ function ActionButton({organization,triggerUpdate}:ActionButtonProps) {
       console.log(status);
       
         try {
-          const {data}  = await axios.get(constant.SERVER +'/organization/status',{
-            headers:{
-              'Authorization':getToken(),
-            },
-            params:{
-              id:organization.id,
-              status:status,
-            }
+          const data = await apiCall('GET','organization/status',{
+            id:organization.organization_id,
+            status:status,
           })
-          
           if(data.success){
             SetAction(prev=>!prev);
+            triggerUpdate();
           }
         } catch (error) {
           alert('Cannot Perform action right now !');

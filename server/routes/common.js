@@ -4,6 +4,7 @@ import { auth } from '../middlewares/auth.js';
 import { ApiUserResponse } from '../helpers/Response.js';
 import {  searchForUser } from '../lib/users.js';
 import { getUser } from '../controllers/users.js';
+import { handleUpdatePassword } from '../controllers/common.js';
 
 
 const router  = express.Router();
@@ -22,6 +23,8 @@ router.get('/verify',auth,async (req,res)=>{
 })
 
 router.post('/login',getUser)
+
+router.post('/update-password',auth,handleUpdatePassword)
 
 
 export default router;

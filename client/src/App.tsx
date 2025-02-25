@@ -29,6 +29,10 @@ import UserDetail from './components/SuperAdmin/DetailPage/UserPage/UserDetail';
 
 import Withdrawals from './components/Admin/Transactions/Withdrawals';
 import CalenderPage from './components/User/Calender/CalenderPage';
+import AdminHome from './components/Admin/Home/AdminHome';
+import OrgUpdate from './components/Admin/Form/OrgUpdate';
+import SuperHome from './components/SuperAdmin/HomePage/SuperHome';
+import UserHome from './components/User/HomePage/UserHome';
 
 
 const router = createBrowserRouter([
@@ -52,7 +56,7 @@ const router = createBrowserRouter([
         children:[
           {
             path:'',
-            element:<div>HEllo</div>
+            element:<UserHome/>
           },
           {
             path:'calendar',
@@ -86,7 +90,7 @@ const router = createBrowserRouter([
         children:[
           {
             path:'',
-            element:<div>HEllo</div>
+            element:<AdminHome/>
           },
           {
             path:'organization',
@@ -94,7 +98,7 @@ const router = createBrowserRouter([
           },
           {
             path:'update',
-            element:<OrgUpdateForm/>
+            element:<OrgUpdate/>
           },
           {
             path:'users-list',
@@ -136,7 +140,7 @@ const router = createBrowserRouter([
         children:[
           {
             path:'',
-            element:<Home/>
+            element:<SuperHome/>
           },
           {
             path:'organizations',

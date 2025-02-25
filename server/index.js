@@ -1,9 +1,10 @@
 import express from 'express';
+import path from 'node:path'
 import cors from 'cors';
 import env from './constants.js'
 import {connectDb} from './db/initDb.js';
 import morgan from 'morgan';
-
+import favicon from 'serve-favicon'
 //MIDDLEWARES
 import { logger } from './middlewares/helperMiddlewares.js';
 import { auth } from './middlewares/auth.js';
@@ -29,6 +30,7 @@ const options= {
 }
 
 // app.use(logger);
+app.use(favicon(path.resolve('public','favicon.ico')))
 app.use(morgan('dev'));
 app.use(cors())
 app.use(express.json())

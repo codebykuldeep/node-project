@@ -1,71 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import InputField from "./InputField";
 import classes from "./form.module.css";
 import { Button, InputLabel } from "@mui/material";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store/store";
-import { IOrganization, IUser } from "../../../types/dataTypes";
-import { getOrganizationData } from "../../../utils/fetchMethods";
-import { ErrorState } from "../../../types/errorTypes";
+import { IOrganization } from "../../../types/dataTypes";
 import {
   checkValidFormState,
-  populateFormState,
-  validation,
+  populateFormState
 } from "../../../utils/validationMethods";
-import { getToken } from "../../../helpers/utilityFns";
-import axios from "axios";
-import { constant } from "../../../helpers/constants";
-import { useFetch } from "../../../helpers/useFetch";
 import { useMutation } from "@tanstack/react-query";
 import { apiCall } from "../../../utils/httpMethod";
 import ShowSnackbar from "../../Common/UI/ShowSnackbar";
 import useSnack from "../../../helpers/useSnack";
+import { generateFormState } from "../../../utils/formMethods";
+import useForm from "../../../helpers/useForm";
 
+interface Props{
+  organization:IOrganization
+}
 
-
-function OrgUpdateForm() {
-  const user = useSelector((state: RootState) => state.userState.user);
-
-  const [formState, setFormState] = useState<ErrorState>(initialformState);
+function OrgUpdateForm({organization}:Props) {
+  const {formState,setFormState,handleFormChange,handleImage} = useForm(generateFormState<IOrganization>(organization,formFields));
   const {snackState,snackOpen,snackClose} =useSnack();
-  const [fetchedData,loading,error] = useFetch<IOrganization>('/organization/'+ user!.organization_id)
   const {mutateAsync,isPending} =useMutation({
-    mutationFn:(body:unknown)=>apiCall('POST','organization/update',null,body)
+    mutationFn:(body:unknown)=>apiCall('POST','organization/update',null,body),
+    mutationKey:['organization','detail']
   })
-  let data: IOrganization;
-  if (!error) {
-    data = fetchedData as IOrganization;
-  } else {
-    return <p>Error while loading page</p>;
-  }
-
-
-  function handleFormChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    const [msg, status] = validation(name, value);
-    setFormState((prev) => ({
-      ...prev,
-      [name]: {
-        message: msg,
-        status: status,
-        value: value,
-      },
-    }));
-  }
+  
+  
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     console.log(formState);
 
     if (checkValidFormState(formState)) {
       const formData = new FormData(event.target as HTMLFormElement);
-      const body = Object.fromEntries(formData.entries());
-      console.log(body);
-      const response = await mutateAsync({
-        ...body,
-        id:data!.id,
-      })
+      formData.append('id',organization.organization_id);
+      
+      const response = await mutateAsync(formData);
       if(response.success){
         snackOpen(true,"success",'updated successfully',);
       }
@@ -77,31 +47,8 @@ function OrgUpdateForm() {
     }
   }
 
-  function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(event.target.files);
-    const name = event.target.name;
-    const value = event.target.value;
-    if (event.target.files) {
-      if (!event.target.files[0].type.includes("image")) {
-        setFormState((prev) => ({
-          ...prev,
-          [name]: {
-            message: "Please select a valid image",
-            status: true,
-            value: value,
-          },
-        }));
-      } else {
-        handleFormChange(event);
-      }
-    } else {
-      handleFormChange(event);
-    }
-  }
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  console.log(formState);
+  
   return (
     <div className={classes.container}>
       <div className={classes.heading}>
@@ -112,7 +59,7 @@ function OrgUpdateForm() {
           type="text"
           name="name"
           label="Name"
-          value={data.name}
+          value={formState.name.value}
           onChange={handleFormChange}
           formState={formState}
         />
@@ -120,7 +67,7 @@ function OrgUpdateForm() {
           type="text"
           name="description"
           label="Description"
-          value={data.description}
+          value={formState.description.value}
           onChange={handleFormChange}
           formState={formState}
         />
@@ -128,7 +75,7 @@ function OrgUpdateForm() {
           type="text"
           name="payment_id"
           label="Payment id"
-          value={data.payment_id}
+          value={formState.payment_id.value}
           onChange={handleFormChange}
           formState={formState}
         />
@@ -143,7 +90,7 @@ function OrgUpdateForm() {
           />
         </div>
         <div>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" loading={isPending} loadingPosition="end">
             Update
           </Button>
         </div>
@@ -155,58 +102,5 @@ function OrgUpdateForm() {
 
 export default OrgUpdateForm;
 
-function fillFormState<T extends IOrganization | IUser>(
-  initialformState: ErrorState,
-  data: T,
-  ...property: string[]
-) {
-  for (let i = 0; i < property.length; i++) {
-    const [msg, status] = validation(property[i], data[property[i]]);
-    initialformState = {
-      ...initialformState,
-      [property[i]]: {
-        message: msg,
-        status: status,
-        value: data[property[i]],
-      },
-    };
-  }
-  return initialformState;
-}
 
-function generateFormState(initialformState: ErrorState, data: IOrganization) {
-  const newState = fillFormState<IOrganization>(
-    initialformState,
-    data,
-    "name",
-    "description",
-    "payment_id"
-  );
-  return newState;
-}
-
-
-
-
-const initialformState = {
-  name: {
-    status: false,
-    message: "",
-    value: "",
-  },
-  description: {
-    status: false,
-    message: "",
-    value: "",
-  },
-  payment_id: {
-    status: false,
-    message: "",
-    value: "",
-  },
-  payment_url: {
-    status: false,
-    message: "",
-    value: "",
-  },
-};
+const formFields =['name','description','payment_id','payment_url'];
