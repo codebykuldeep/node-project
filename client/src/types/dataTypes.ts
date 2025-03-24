@@ -12,6 +12,7 @@ export interface IOrganization{
     status:string,
     payment_id:string;
     payment_url:string;
+    organization_id:string;
     [index:string]:string;
 }
 

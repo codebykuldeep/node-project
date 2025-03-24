@@ -25,11 +25,11 @@ const SideBarProps:ISidebarProps =[
         icon:<HomeIcon/>,
         link:''
       },
-      {
-        text:'Details',
-        icon:<InfoIcon/>,
-        link:'organization'
-      },
+      // {
+      //   text:'Details',
+      //   icon:<InfoIcon/>,
+      //   link:'organization'
+      // },
       {
         text:'Update Info',
         icon:<BusinessIcon/>,

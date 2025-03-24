@@ -145,12 +145,11 @@ export async function handleGetUserDetails(req,res) {
 
 export async function handleUpdateUser(req,res) {
     const {name,email,number} = req.body;
-    const id = req.user.user_id;
     const role = req.user.role;
     
     try {
         
-        const data = await updateUser(id,email,name,number,role);
+        const data = await updateUser(req.user,email,name,number,role);
         return res.status(200).json(new actionResponse(200,{message:'Details updated successfully'},true));
     } catch (error) {
         console.log(error);

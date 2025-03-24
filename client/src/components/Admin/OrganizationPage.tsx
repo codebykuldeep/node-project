@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useQuery } from '@tanstack/react-query';
 import { apiCall } from '../../utils/httpMethod';
+import OrgPage from '../Common/OrgPage/OrgPage';
 
 function OrganizationPage() {
    const user = useSelector((state:RootState)=>state.userState.user)
@@ -24,15 +25,16 @@ function OrganizationPage() {
     <div>
         {
             data && organization && (
-                <div>
-                <div className={classes.heading}>
-                    <h1>Organisation Details</h1>
-                </div>
-                <div className={classes.detail}>
-                    <h2>{organization.name}</h2>
-                    <p>{organization.description}</p>
-                </div>
-                </div>
+                // <div>
+                // <div className={classes.heading}>
+                //     <h1>Organisation Details</h1>
+                // </div>
+                // <div className={classes.detail}>
+                //     <h2>{organization.name}</h2>
+                //     <p>{organization.description}</p>
+                // </div>
+                // </div>
+                <OrgPage organization={organization}/>
             )
         }
     </div>

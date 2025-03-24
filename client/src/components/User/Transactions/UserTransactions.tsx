@@ -11,12 +11,13 @@ import { apiCall } from '../../../utils/httpMethod';
 
 
 
-function UserTransactions() {
+function UserTransactions({id}:{id?:string}) {
   const user = useSelector((state:RootState)=>state.userState.user)
   const [modalData,setModalData] = useState<ITransaction | null>(null)
+  const fetchId = id || user!.user_id;
   const {data,isFetching,isError,refetch} = useQuery({
     queryKey:[],
-    queryFn:()=>apiCall('GET','transactions/'+user!.organization_id,{
+    queryFn:()=>apiCall('GET','transactions/'+fetchId,{
       type:'all'
     })
   })

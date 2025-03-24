@@ -69,17 +69,23 @@ export async function getUser(user) {
 
 
 
-export async function updateUser(id,email,name,number,role) {
+export async function updateUser(user,email,name,number,role) {
     let result;
     if(role === 'SUPER_ADMIN'){
+        const id = user.super_id;
         result = await db.query('UPDATE super_admin SET email = $1 , name = $2 , number = $3 WHERE super_id = $4 ;',[email,name,number,id]);
     }
     else if(role === 'ADMIN'){
+        const id = user.admin_id;
+        
         result = await db.query('UPDATE admin SET email = $1 , name = $2 , number = $3 WHERE admin_id = $4 ;',[email,name,number,id]);
     }
     else{
+        const id = user.user_id;
         result = await db.query('UPDATE users SET email = $1 , name = $2 , number = $3 WHERE user_id = $4 ;',[email,name,number,id]);
     }
+    console.log(result);
+    
     return result.rows;
 }
 
@@ -123,4 +129,35 @@ export async function searchUsers(query) {
 export async function getAdmin(id) {
     const res = await db.query(`SELECT * FROM admin where admin_id = $1 ;`,[id]);
     return res.rows.length > 0 ? res.rows[0] : undefined;
+}
+
+
+export async function getUsersDetails(user_id, organization_id) {
+  const user_res = await db.query(`SELECT * FROM users where user_id = $1 ;`, [user_id]);
+
+  const data_res = await db.query(
+    `SELECT 
+(select SUM(amount)  from transactions WHERE organization_id = $1 AND user_id = $2 AND approved IS NULL AND payment_type = true
+) AS credit_pending ,
+( select SUM(amount)  from transactions WHERE organization_id = $1 AND user_id = $2 AND  approved = true AND payment_type = true
+) AS credit_approved ,
+( select SUM(amount)  from transactions WHERE organization_id = $1 AND user_id = $2 AND  approved = false AND payment_type = true
+) AS credit_rejected ,
+(select SUM(amount)  from transactions WHERE organization_id = $1 AND user_id = $2 AND  approved IS NULL AND payment_type = false
+) AS debit_pending ,
+( select SUM(amount)  from transactions WHERE organization_id = $1 AND user_id = $2 AND  approved = true AND payment_type = false 
+ ) AS debit_approved ,
+ ( select SUM(amount) from transactions WHERE organization_id = $1 AND user_id = $2 AND  approved = false AND payment_type = false 
+)  AS debit_rejected ,
+( select COUNT(*)  from transactions WHERE organization_id = $1 AND user_id = $2 AND  payment_type = true ) AS transaction_credit ,
+( select COUNT(*)  from transactions WHERE organization_id = $1 AND user_id = $2 AND  payment_type = false ) AS transaction_debit
+`,
+    [organization_id,user_id]
+  );
+
+  const data ={
+    user:user_res.rows[0],
+    data:data_res.rows[0]
+  }
+  return data;
 }

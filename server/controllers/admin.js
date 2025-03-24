@@ -2,9 +2,10 @@ import { actionResponse } from "../helpers/Response.js";
 import { addAdmin, searchAdmin } from "../lib/admin.js";
 import bcrypt from "bcrypt"
 import { searchOrganizations } from "../lib/organization.js";
-import { searchUsers } from "../lib/users.js";
+import { getUsersDetails, searchUsers } from "../lib/users.js";
 import passwordGenerator from 'generate-password';
 import { sendSignUPMailForUser } from "../services/mailServices.js";
+import { getSuperAdminHomeDetails } from "../lib/superAdmin.js";
 
 export async function handleAdminRegister(req,res){
     
@@ -38,6 +39,31 @@ export async function handleSearch(req,res) {
           },true))
      }
      catch(error){
+          return res.json(new actionResponse(500,error,false))
+     }
+}
+
+
+export async function handleSuperAdminHome(req,res) {
+     try {
+          const data = await getSuperAdminHomeDetails();
+          return res.json(new actionResponse(200,data,true))
+     } catch (error) {
+          console.log(error);
+          
+          return res.json(new actionResponse(500,error,false))
+     }
+}
+
+export async function handleGetUserDetailsForProfile(req,res) {
+     const {user_id,organization_id}= req.query;
+    
+     try {
+          const data = await getUsersDetails(user_id,organization_id);
+          return res.json(new actionResponse(200,data,true))
+     } catch (error) {
+          console.log(error);
+          
           return res.json(new actionResponse(500,error,false))
      }
 }
