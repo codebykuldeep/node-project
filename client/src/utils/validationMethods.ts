@@ -18,7 +18,7 @@ function passwordValidation(value:string):[string,boolean]{
         return ['This field is required',true];
     }
     if(value !=='' &&  value.length < 6){
-        return ['Minimum Password length should be 6',true];
+        return ['Min length should be 6',true];
     }
     return ['',false];
 }

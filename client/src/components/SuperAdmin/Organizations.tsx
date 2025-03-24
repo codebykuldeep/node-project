@@ -9,6 +9,7 @@ import { ColumnType } from "../../types/listTypes";
 import ShowTable from "../Common/ShowTable";
 import { useQuery } from "@tanstack/react-query";
 import { apiCall } from "../../utils/httpMethod";
+import { getStatusChip } from "../Admin/Transactions/Transactions";
 
 function Organizations() {
   const navigate = useNavigate();
@@ -85,10 +86,11 @@ export const OrganizationColumn: ColumnType[] = [
     id: "status",
     label: "Status",
     format: (value) => {
+      let output = "active";
       if (Boolean(value) === false) {
-        return "inactive";
+        output =  "inactive";
       }
-      return "active";
+      return getStatusChip(output) ;
     },
   },
 ];

@@ -5,9 +5,9 @@ function generateToken(payload,expiry='24h'){
     const token = jwt.sign(
         payload,
         config.SECRET,
-        {
-            expiresIn:expiry
-        }
+        // {
+        //     expiresIn:expiry
+        // }
     );
     return token
 }

@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiCall } from '../../utils/httpMethod';
 import { ColumnType } from '../../types/listTypes';
 import ShowTable from '../Common/ShowTable';
+import { getStatusChip } from '../Admin/Transactions/Transactions';
 
 
 function Users() {
@@ -87,17 +88,17 @@ const UserColumn: ColumnType[] = [
   {
     id: "amount",
     label: "Deposited Amount",
-    align:'center',
+    align: "center",
     format: (value) => {
-        return `$ ${value}`;
+      return `$ ${value}`;
     },
   },
   {
     id: "interest",
     label: "Interest Rate",
-    align:'center',
+    align: "center",
     format: (value) => {
-        return `${value}%`;
+      return `${value}%`;
     },
   },
   {
@@ -108,10 +109,11 @@ const UserColumn: ColumnType[] = [
     id: "status",
     label: "User Status",
     format: (value) => {
+      let output = "active";
       if (Boolean(value) === false) {
-        return "inactive";
+        output = "inactive";
       }
-      return "active";
+      return getStatusChip(output);
     },
   },
 ];
