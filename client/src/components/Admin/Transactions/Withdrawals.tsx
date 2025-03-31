@@ -10,6 +10,7 @@ import { apiCall } from '../../../utils/httpMethod';
 import { useQuery } from '@tanstack/react-query';
 import ShowTable from '../../Common/ShowTable';
 import { ColumnType } from '../../../types/listTypes';
+import NoDataInTable from '../../Common/MessageUI/NoDataInTable';
 
 
 function Withdrawals({id}:{id?:string}) {
@@ -77,7 +78,7 @@ function Withdrawals({id}:{id?:string}) {
         </div>
         {data && modalData && <WithdrawalDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
         {data && rows.length> 0 && <ShowTable<ITransaction> columns={columns} rows={rows} openModal={handleOpen} />}
-        {data && rows.length === 0 && <p>No Withdrawals transactions</p>}
+        {data && rows.length === 0 && <NoDataInTable message='No Withdrawals transactions'/>}
     </div>
   )
 }

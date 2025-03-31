@@ -6,7 +6,6 @@ import RootLayout from './components/Layout/RootLayout';
 import AdminLayout from './components/Layout/AdminLayout';
 import DashBoardLayout from './components/Layout/DashBoardLayout';
 import SuperAdminLayout from './components/Layout/SuperAdminLayout';
-import Home from './components/SuperAdmin/Home';
 import Organizations from './components/SuperAdmin/Organizations';
 import Admins from './components/SuperAdmin/Admins';
 import Users from './components/SuperAdmin/Users';
@@ -14,7 +13,6 @@ import OrganizationForm from './components/SuperAdmin/form/OrganizationForm';
 import AdminForm from './components/SuperAdmin/form/AdminForm';
 import OrganizationPage from './components/Admin/OrganizationPage';
 import Logout from './components/Common/Logout';
-import OrgUpdateForm from './components/Admin/Form/OrgUpdateForm';
 import OrgUsers from './components/Admin/OrgUsers';
 import Transactions from './components/Admin/Transactions/Transactions';
 import PendingTransactions from './components/Admin/Transactions/PendingTrasactions';
@@ -33,6 +31,7 @@ import AdminHome from './components/Admin/Home/AdminHome';
 import OrgUpdate from './components/Admin/Form/OrgUpdate';
 import SuperHome from './components/SuperAdmin/HomePage/SuperHome';
 import UserHome from './components/User/HomePage/UserHome';
+import AuthPage from './components/Common/AuthPage/Authpage';
 
 
 const router = createBrowserRouter([
@@ -42,8 +41,20 @@ const router = createBrowserRouter([
     children:[
       {
         path:'/',
-        element:<Login/>
+        element:<AuthPage/>
       },
+      {
+        path:'/login',
+        element:<AuthPage/>
+      },
+      {
+        path:'/reset-password',
+        element:<AuthPage/>
+      },
+      {
+        path:'/reset',
+        element:<AuthPage/>
+      }
     ]
   },
   {

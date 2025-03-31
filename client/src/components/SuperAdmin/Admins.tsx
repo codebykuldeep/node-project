@@ -9,6 +9,7 @@ import { ColumnType } from "../../types/listTypes";
 import ShowTable from "../Common/ShowTable";
 import { apiCall } from "../../utils/httpMethod";
 import { useQuery } from "@tanstack/react-query";
+import { getStatusChip } from "../Admin/Transactions/Transactions";
 
 function Admins() {
   const navigate = useNavigate();
@@ -88,12 +89,11 @@ const AdminColumn: ColumnType[] = [
     id: "admin_status",
     label: "Admin Status",
     format: (value) => {
-      console.log(value);
-      
-      if (Boolean(value) ) {
-        return "active";
+      let output = "active";
+      if (Boolean(value) === false) {
+        output = "inactive";
       }
-      return "inactive";
+      return getStatusChip(output);
     },
   },
   {
@@ -104,10 +104,11 @@ const AdminColumn: ColumnType[] = [
     id: "org_status",
     label: "Org Status",
     format: (value) => {
+      let output = "active";
       if (Boolean(value) === false) {
-        return "inactive";
+        output = "inactive";
       }
-      return "active";
+      return getStatusChip(output);
     },
   },
 ];

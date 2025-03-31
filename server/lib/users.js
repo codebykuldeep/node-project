@@ -23,7 +23,7 @@ export async function  searchForUser(email) {
         return user;
     }
 
-    //second check for normal user
+    //second check for admin user
     const adminResult  = await db.query('SELECT * FROM admin WHERE LOWER(email) = $1 ;',[email]);
     if(adminResult.rows.length > 0){
         const user = adminResult.rows[0];
@@ -31,7 +31,7 @@ export async function  searchForUser(email) {
         return user;
     }
 
-    //second check for normal user
+    //third check for super admin user
     const superAdminResult  = await db.query('SELECT * FROM super_admin WHERE LOWER(email) = $1 ;',[email]);
     if(superAdminResult.rows.length > 0){
         const user = superAdminResult.rows[0];

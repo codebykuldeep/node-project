@@ -8,6 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { apiCall } from '../../../utils/httpMethod';
 import { ColumnType } from '../../../types/listTypes';
 import ShowTable from '../../Common/ShowTable';
+import NoDataInTable from '../../Common/MessageUI/NoDataInTable';
+import { Chip } from '@mui/material';
 
 
 
@@ -47,7 +49,7 @@ function Transactions({id}:{id?:string}) {
 
         {data && <TransactionDetail open={open} handleClose={handleClose} data={modalData!} updateData={refetch}/>}
         {data && rows.length> 0 && <ShowTable<ITransaction> columns={columns} rows={rows} openModal={handleOpen} />}
-        {data && rows.length === 0 && <p>No transactions</p>}
+        {data && rows.length === 0 && <NoDataInTable />}
     </div>
   )
 }
@@ -73,13 +75,23 @@ const columns: ColumnType[] = [
     id: "approved",
     label: "Status",
     format:(value)=>{
+      let output = 'accepted';
       if(value === null)
-        return 'pending';
+        output='pending';
       if(Boolean(value) === false)
-        return 'rejected';
+        output='rejected';
 
-      return 'accepted';
+      return getStatusChip(output)
     }
   },
   { id: "created_at", label: "Payment Date" },
 ];
+
+export const getStatusChip = (status: string) => {
+    let color: "success" | "warning" | "error" = "success";
+    if (status === "accepted" ||status === "active") color = "success";
+    else if (status === "rejected" || status === "inactive") color = "error";
+    else color = "warning";
+
+    return <Chip label={status} color={color} size="small" />;
+  };

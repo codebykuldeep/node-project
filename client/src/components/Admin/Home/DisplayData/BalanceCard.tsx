@@ -3,6 +3,8 @@ import React from "react";
 import Grid from "@mui/material/Grid2";
 import ShowChart from "./ShowChart";
 
+import classes from './card.module.css';
+
 interface Props {
   details: {
     [index: string]: string;
@@ -61,12 +63,12 @@ function BalanceCard({ details }: Props) {
   ];
   return (
     <Box>
-      <Grid container spacing={3}>
-        <Grid size={12 / 3}>
-          <Card>
-            <CardContent>
-            <Typography>Total Available Funds</Typography>
-              <Typography variant="h5">
+      <Grid container spacing={3} display="flex">
+        <Grid size={12 / 3} >
+          <Card className={classes.bal_card}>
+            <CardContent className={classes.card_content}>
+            <Typography sx={{ color: '#777' }}>Total Available Funds</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
                 ${" "}
                 {Number(details.credit_approved) -
                   Number(details.debit_approved)}
@@ -77,24 +79,19 @@ function BalanceCard({ details }: Props) {
           </Card>
         </Grid>
         <Grid size={12 / 3}>
-          <Card>
-            <CardContent>
-            <Typography>Total Credit History</Typography>
-              {/* <Typography variant="h5">
-                ${" "}
-                {Number(details.credit_approved) -
-                  Number(details.debit_approved)}
-              </Typography> */}
+          <Card className={classes.bal_card}>
+          <CardContent className={classes.card_content}>
+            <Typography sx={{ color: '#777' }}>Total Credit History</Typography>
               
               <ShowChart data={CreditData} />
             </CardContent>
           </Card>
         </Grid>
         <Grid size={12 / 3}>
-          <Card>
-            <CardContent>
-            <Typography>Total Debit History</Typography>
-              <Typography variant="h5">
+          <Card className={classes.bal_card}>
+          <CardContent className={classes.card_content}>
+            <Typography sx={{ color: '#777' }}>Total Debit History</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
                 ${" "}
                 {Number(details.credit_approved) -
                   Number(details.debit_approved)}

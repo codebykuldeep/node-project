@@ -55,18 +55,3 @@ connectDb().then(()=>{
         
     })
 })
-
-
-
-
-
-
-
-
-
-
-// db.connect(function(err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-//     // db.query('INSERT INTO users values($1,$2);',[2,'max']).then(res=>{console.log(res);})
-//   });

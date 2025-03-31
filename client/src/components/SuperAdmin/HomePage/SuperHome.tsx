@@ -7,6 +7,14 @@ import { RootState } from '../../../store/store'
 import CardInfo from './CardInfo'
 import FundInfo from './FundInfo'
 
+
+//ICONS
+import PeopleIcon from '@mui/icons-material/People';
+import BusinessIcon from '@mui/icons-material/Business';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+
+
 function SuperHome() {
     const user = useSelector((state:RootState)=>state.userState.user)
     const {data,isError,isFetching} = useQuery({
@@ -42,14 +50,17 @@ export default SuperHome
 const transDataKeys = [
     {
       id: "",
+      icon:<ReceiptIcon color="primary" />,
       label: "Transactions Count",
     },
     {
       id: "transaction_credit",
+      icon:<AttachMoneyIcon color="success" />,
       label: "Credit transactions",
     },
     {
       id: "transaction_debit",
+      icon:<AttachMoneyIcon color="error" />,
       label: "Debit transactions",
     },
   ];
@@ -57,14 +68,17 @@ const transDataKeys = [
 const OrgdataKeys = [
     {
       id: "",
+      icon:<BusinessIcon color="primary" />,
       label: "Total Organizations",
     },
     {
       id: "org_active",
+      icon:<BusinessIcon color="success" />,
       label: "Organizations Active",
     },
     {
       id: "org_inactive",
+      icon:<BusinessIcon color="error" />,
       label: "Organizations Inactive",
     },
   ];
@@ -73,14 +87,17 @@ const OrgdataKeys = [
 const UsersdataKeys = [
     {
       id: "user_active",
+      icon:<PeopleIcon color="primary" />,
       label: "Total Users",
     },
     {
       id: "user_active",
+      icon:<PeopleIcon color="success" />,
       label: "User Active",
     },
     {
       id: "user_inactive",
+      icon:<PeopleIcon color="error" />,
       label: "User Inactive",
     },
   ];

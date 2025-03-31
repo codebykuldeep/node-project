@@ -51,12 +51,12 @@ const SideBarProps:ISidebarProps =[
         link:'transactions'
       },
       {
-        text:'Pendings',
+        text:'Pending',
         icon:<PendingActionsIcon/>,
         link:'pending'
       },
       {
-        text:'Withdrawals Req',
+        text:'Withdrawals',
         icon:<IosShareIcon/>,
         link:'withdrawals'
       }
